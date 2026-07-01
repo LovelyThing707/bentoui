@@ -1,0 +1,13 @@
+# dependencies / build output (Vercel rebuilds from source)
+node_modules/
+dist/
+
+# large source archives / duplicates (kept locally, not in repo)
+*.rar
+アイキャッチ画像 11点/
+
+# logs / OS cruft
+*.log
+Thumbs.db
+.DS_Store
+.vercel

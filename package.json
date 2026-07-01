@@ -1,0 +1,13 @@
+{
+  "name": "netkaisen-hikaku",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ネット回線比較.com — static affiliate comparison site (13 pages from data/ via build.js)",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}

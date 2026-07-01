@@ -1,0 +1,319 @@
+{
+  "_meta": {
+    "purpose": "Single data source for ネット回線比較.com. All pages render from this.",
+    "_status": "BUILD-READY EXPANSION. All 11 products defined, all 11 category rankings filled, smartphoneDiscount filled, diagnosis copy filled, CTA affiliate URLs filled from 01_リンク先一覧.json (BLOCKER RESOLVED). footerNav hrefs filled from 00_TOPページ.json. footerDisclaimer still pending Figma verification.",
+    "_canonicalNames": {
+      "_note": "Product names appear with variant spellings across sheets. Canonical key/name chosen per product; aliases listed so the build can normalize.",
+      "mobareco-air": { "canonical": "モバレコAir", "aliases": ["モバレコAri (typo in 03_実質月額表)"] },
+      "broad-wimax": { "canonical": "BroadWiMAX", "aliases": ["Broad WiMAX (space, page-data sheets)"] },
+      "jcom": { "canonical": "J:COM", "aliases": ["JCOM (link list & スマホ割)", "J:COM"] },
+      "softbank-hikari": { "canonical": "SoftBank光", "aliases": ["ソフトバンク光 (スマホ割 sheet)", "SoftBank 光"] },
+      "docomo-hikari": { "canonical": "ドコモ光", "aliases": [] },
+      "nuro-hikari": { "canonical": "NURO光", "aliases": [] },
+      "au-hikari": { "canonical": "auひかり", "aliases": [] },
+      "uq-wimax": { "canonical": "UQ WiMAX", "aliases": ["UQWiMAX (link list)", "UQ WiMAX"] },
+      "kashimo-wimax": { "canonical": "カシモWiMAX", "aliases": ["カシモ WiMAX (space, 簡易比較表)"] },
+      "5g-connect": { "canonical": "5G CONNECT", "aliases": [] },
+      "biglobe-wimax": { "canonical": "BIGLOBE WiMAX", "aliases": ["BIGLOBEWiMAX (link list)"] }
+    }
+  },
+  "site": {
+    "brand": "ネット回線比較.com",
+    "contactEmail": "contact@ad-kikoushi.jp",
+    "gtmId": "GTM-59Z4BH",
+    "copyright": "© 2026 ネット回線比較.com",
+    "promoLine": "本ページはプロモーションが含まれます",
+    "eyecatchBadge": {
+      "format": "{year}年最新版",
+      "_note": "Live HTML/CSS overlay (pill + text) on each eyecatch image, top-left (CLAUDE.md §10b). {year} = new Date().getFullYear(). Images generated WITHOUT this baked in."
+    },
+    "footerNav": [
+      { "label": "お役立ちコラム", "href": "https://internet-hikaku.com/lp/ranking/column/" },
+      { "label": "会社概要・ランキングについて", "href": "https://internet-hikaku.com/lp/ranking/company/" },
+      { "label": "コンサルタントに相談", "href": "mailto:contact@ad-kikoushi.jp" }
+    ],
+    "_footerNav_note": "お役立ちコラム & 会社概要 URLs from 00_TOPページ.json (rows: internet-hikaku.com/lp/ranking/column|company). コンサルタントに相談 = mailto per 00_TOPページ.json note 'メールが立ち上がり下記のアドレスに送信できるようにする contact@ad-kikoushi.jp'. Confirm with client.",
+    "footerDisclaimer": "当サイトでは掲載会社様と提携をしてサービスの掲載をさせていただいております。当サイトで販売している訳ではございません。商品に関するお問い合わせは各リンク先の企業様へお願いいたします。当サイトで紹介している情報は十分な注意を払って提供しておりますが、情報の正確性その他一切の事項について保証をするものではありません。お客様のご判断とご責任でご利用下さい。本ページのいかなる情報により生じた損失に対しても当社は責任を負いません。",
+    "_footerDisclaimer_TODO": "Verify exact wording vs. approved Figma footer."
+  },
+  "ctaRouting": {
+    "detect": [
+      { "param": "gclid", "source": "google" },
+      { "param": "yclid", "source": "yahoo" },
+      { "param": "msclkid", "source": "bing" }
+    ],
+    "utmSourceMap": { "google": "google", "yahoo": "yahoo", "bing": "bing" },
+    "default": "その他",
+    "variants": ["google", "yahoo", "bing", "その他"],
+    "_note": "5 products (jcom, nuro-hikari, kashimo-wimax, uq-wimax, biglobe-wimax) have a single '指定なし' URL; all 4 variants set to that same URL. Router logic still works (always picks one of the 4)."
+  },
+  "diagnosis": {
+    "branchQuestion": "q1",
+    "_branchNote": "Per 02_セルフ診断.json: 'Q1の回答のみで結果を分岐される。Q2以下は何を選んでも関係ない。'",
+    "results": { "戸建て": "mobareco-air", "集合住宅": "mobareco-air", "外出先": "broad-wimax" },
+    "questions": [
+      {
+        "id": "q1",
+        "label": "Q1. 主にどこで使いますか？",
+        "branches": true,
+        "options": [
+          { "value": "戸建て", "result": "mobareco-air" },
+          { "value": "集合住宅", "result": "mobareco-air" },
+          { "value": "外出先", "result": "broad-wimax" }
+        ]
+      },
+      {
+        "id": "q2",
+        "label": "Q2. 主な利用目的は何ですか？",
+        "branches": false,
+        "options": [
+          { "value": "オンラインゲーム・仕事（大容量）" },
+          { "value": "動画視聴・SNS（標準利用）" },
+          { "value": "ウェブ閲覧・メール" }
+        ]
+      },
+      {
+        "id": "q3",
+        "label": "Q3. いつまでに必要ですか？",
+        "branches": false,
+        "options": [
+          { "value": "今すぐ（最短明日から）" },
+          { "value": "3日～１週間" },
+          { "value": "急いでいない（１ヶ月以内程度）" }
+        ]
+      },
+      {
+        "id": "q4",
+        "label": "Q4. お使いのスマホは何ですか？",
+        "branches": false,
+        "_note": "Per 02_セルフ診断: 'わからない' → TOPページの最新TOP5徹底比較表にスクロール（scroll to #comparison-matrix）.",
+        "options": [
+          { "value": "SoftBank／Ymobile" },
+          { "value": "au／UQモバイル" },
+          { "value": "docomo" },
+          { "value": "わからない", "action": "scrollToComparison" }
+        ]
+      },
+      {
+        "id": "q5",
+        "label": "Q5. 回線タイプにこだわりはありますか？",
+        "branches": false,
+        "options": [
+          { "value": "工事なしが良い" },
+          { "value": "工事しても良い" },
+          { "value": "こだわりなし" }
+        ]
+      }
+    ],
+    "resultNote": "結果画面の案件リンクボタンは products.<key>.cta（source-routed）を使用。結果案件ロゴを表示。デザインはTOPページに合わせる。"
+  },
+  "products": {
+    "_note": "cta.* = 4 source-routed affiliate URL variants from 01_リンク先一覧.json. jisshitsu = 実質月額(税込,12ヶ月相当). type from ranking-sheet lineType.",
+    "mobareco-air": {
+      "name": "モバレコAir",
+      "type": "ホームルーター",
+      "jisshitsu": 100,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=2686c86a&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=a2ax466a&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=32662aeq&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=u62ua6e6&gclid=&yclid=&msclkid="
+      }
+    },
+    "broad-wimax": {
+      "name": "BroadWiMAX",
+      "type": "ポケット型WiFi・ホームルーター",
+      "jisshitsu": 626,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=v1264a60&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=60I6Caa6&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=o462d29o&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=6a122326&gclid=&yclid=&msclkid="
+      }
+    },
+    "au-hikari": {
+      "name": "auひかり",
+      "type": "光回線",
+      "jisshitsu": 3547,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=664665a1&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=b27266c6&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=cc266220&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=161266ad&gclid=&yclid=&msclkid="
+      }
+    },
+    "softbank-hikari": {
+      "name": "SoftBank光",
+      "type": "光回線",
+      "jisshitsu": 3097,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=686en5w4&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=6a0Q5429&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=644a30d2&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=E2f5k26e&gclid=&yclid=&msclkid="
+      }
+    },
+    "docomo-hikari": {
+      "name": "ドコモ光",
+      "type": "光回線",
+      "jisshitsu": 3150,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=46b7642c&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=59a8022z&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=a96M5b21&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=kc626j26&gclid=&yclid=&msclkid="
+      }
+    },
+    "5g-connect": {
+      "name": "5G CONNECT",
+      "type": "ポケット型WiFi・ホームルーター",
+      "jisshitsu": 4800,
+      "linkSplit": "4-way",
+      "affiliateNetwork": "magic-ad",
+      "cta": {
+        "google": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=Ga6Yc68Y&gclid=&yclid=&msclkid=",
+        "yahoo": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=66cOa066&gclid=&yclid=&msclkid=",
+        "bing": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=206a1a57&gclid=&yclid=&msclkid=",
+        "その他": "https://ac.magic-ad.jp/7eO54Jbc16Of80e6/cl/?bId=f0abe261&gclid=&yclid=&msclkid="
+      }
+    },
+    "jcom": {
+      "name": "J:COM",
+      "type": "光回線",
+      "jisshitsu": 3080,
+      "linkSplit": "指定なし",
+      "affiliateNetwork": "a8",
+      "cta": {
+        "google": "https://px.a8.net/svt/ejp?a8mat=3TB56S+HVE1M+54NI+656YQ",
+        "yahoo": "https://px.a8.net/svt/ejp?a8mat=3TB56S+HVE1M+54NI+656YQ",
+        "bing": "https://px.a8.net/svt/ejp?a8mat=3TB56S+HVE1M+54NI+656YQ",
+        "その他": "https://px.a8.net/svt/ejp?a8mat=3TB56S+HVE1M+54NI+656YQ"
+      }
+    },
+    "nuro-hikari": {
+      "name": "NURO光",
+      "type": "光回線",
+      "jisshitsu": 3550,
+      "linkSplit": "指定なし",
+      "affiliateNetwork": "rentracks",
+      "cta": {
+        "google": "https://www.rentracks.jp/adx/r.html?idx=0.21555.369265.10391.14830&dna=169364",
+        "yahoo": "https://www.rentracks.jp/adx/r.html?idx=0.21555.369265.10391.14830&dna=169364",
+        "bing": "https://www.rentracks.jp/adx/r.html?idx=0.21555.369265.10391.14830&dna=169364",
+        "その他": "https://www.rentracks.jp/adx/r.html?idx=0.21555.369265.10391.14830&dna=169364"
+      }
+    },
+    "kashimo-wimax": {
+      "name": "カシモWiMAX",
+      "type": "ポケット型WiFi・ホームルーター",
+      "jisshitsu": 4117,
+      "linkSplit": "指定なし",
+      "affiliateNetwork": "affitown",
+      "cta": {
+        "google": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=b56Rg67a",
+        "yahoo": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=b56Rg67a",
+        "bing": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=b56Rg67a",
+        "その他": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=b56Rg67a"
+      }
+    },
+    "uq-wimax": {
+      "name": "UQ WiMAX",
+      "type": "ポケット型WiFi・ホームルーター",
+      "jisshitsu": 4268,
+      "linkSplit": "指定なし",
+      "affiliateNetwork": "affitown",
+      "cta": {
+        "google": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=083b0b54&bannerNum=6",
+        "yahoo": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=083b0b54&bannerNum=6",
+        "bing": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=083b0b54&bannerNum=6",
+        "その他": "https://ac.affitown.jp/0f9D5dacD14cec65/cl/?bId=083b0b54&bannerNum=6"
+      }
+    },
+    "biglobe-wimax": {
+      "name": "BIGLOBE WiMAX",
+      "type": "ポケット型WiFi・ホームルーター",
+      "jisshitsu": 4064,
+      "linkSplit": "指定なし",
+      "affiliateNetwork": "accesstrade",
+      "cta": {
+        "google": "https://h.accesstrade.net/sp/cc?rk=0100p77t00gh0d",
+        "yahoo": "https://h.accesstrade.net/sp/cc?rk=0100p77t00gh0d",
+        "bing": "https://h.accesstrade.net/sp/cc?rk=0100p77t00gh0d",
+        "その他": "https://h.accesstrade.net/sp/cc?rk=0100p77t00gh0d"
+      }
+    }
+  },
+  "rankings": {
+    "_note": "Each = ordered array of 5 product keys, mirroring the per-page ranking order in INPUT 1 page data (which matches the Excel ranking sheets). 'guide' added (article ranking, sheet 05_初心者向けランキング).",
+    "top": ["mobareco-air", "broad-wimax", "jcom", "softbank-hikari", "docomo-hikari"],
+    "hikari": ["nuro-hikari", "jcom", "softbank-hikari", "au-hikari", "docomo-hikari"],
+    "home-router": ["mobareco-air", "broad-wimax", "uq-wimax", "kashimo-wimax", "5g-connect"],
+    "pocket-wifi": ["broad-wimax", "uq-wimax", "kashimo-wimax", "5g-connect", "biglobe-wimax"],
+    "norikae": ["mobareco-air", "broad-wimax", "softbank-hikari", "au-hikari", "docomo-hikari"],
+    "sokujitsu": ["mobareco-air", "broad-wimax", "kashimo-wimax", "5g-connect", "uq-wimax"],
+    "hitorigurashi": ["mobareco-air", "broad-wimax", "uq-wimax", "nuro-hikari", "softbank-hikari"],
+    "kazoku-kodate": ["mobareco-air", "broad-wimax", "jcom", "au-hikari", "softbank-hikari"],
+    "gaishutsu": ["broad-wimax", "uq-wimax", "kashimo-wimax", "5g-connect", "biglobe-wimax"],
+    "game": ["nuro-hikari", "au-hikari", "softbank-hikari", "broad-wimax", "mobareco-air"],
+    "telework": ["mobareco-air", "broad-wimax", "jcom", "softbank-hikari", "docomo-hikari"],
+    "business": ["mobareco-air", "broad-wimax", "softbank-hikari", "au-hikari", "docomo-hikari"],
+    "guide": ["mobareco-air", "broad-wimax", "jcom", "softbank-hikari", "docomo-hikari"]
+  },
+  "simulator": {
+    "_note": "実質月額シミュレーター (TOP). Cumulative avg monthly cost (税込) by months held from 03_実質月額表.json. 3 products only (per source sheet). Slider 12-36ヶ月.",
+    "months": { "min": 12, "max": 36 },
+    "products": {
+      "mobareco-air": {
+        "12": 100, "13": 414, "14": 683, "15": 916, "16": 1120, "17": 1300, "18": 1460,
+        "19": 1603, "20": 1732, "21": 1849, "22": 1955, "23": 2051, "24": 2140, "25": 2222,
+        "26": 2297, "27": 2367, "28": 2431, "29": 2492, "30": 2548, "31": 2601, "32": 2650,
+        "33": 2696, "34": 2740, "35": 2781, "36": 2820
+      },
+      "broad-wimax": {
+        "12": 626, "13": 946, "14": 1220, "15": 1458, "16": 1666, "17": 1849, "18": 2013,
+        "19": 2158, "20": 2290, "21": 2409, "22": 2517, "23": 2615, "24": 2706, "25": 2789,
+        "26": 2866, "27": 2937, "28": 3003, "29": 3064, "30": 3122, "31": 3175, "32": 3225,
+        "33": 3273, "34": 3317, "35": 3359, "36": 3399
+      },
+      "jcom": {
+        "12": 3080, "13": 3317, "14": 3520, "15": 3696, "16": 3850, "17": 3986, "18": 4107,
+        "19": 4215, "20": 4312, "21": 4400, "22": 4480, "23": 4553, "24": 4620, "25": 4682,
+        "26": 4738, "27": 4791, "28": 4840, "29": 4885, "30": 4928, "31": 4968, "32": 5005,
+        "33": 5040, "34": 5073, "35": 5104, "36": 5133
+      }
+    }
+  },
+  "smartphoneDiscount": {
+    "_note": "From 28_スマホ割.json. carrier -> eligible product keys (highlight in TOP5 matrix). Original sheet values: docomo→ドコモ光; au→BroadWiMAX、JCOM; SoftBank→モバレコAir、ソフトバンク光; Rakuten→モバレコAir、BroadWiMAX; 格安SIM→モバレコAir、BroadWiMAX.",
+    "docomo": ["docomo-hikari"],
+    "au": ["broad-wimax", "jcom"],
+    "SoftBank": ["mobareco-air", "softbank-hikari"],
+    "Rakuten": ["mobareco-air", "broad-wimax"],
+    "格安SIM": ["mobareco-air", "broad-wimax"]
+  },
+  "pages": {
+    "top":           { "file": "index.html",          "template": "top",     "h1": "",                                              "eyecatch": null,                                    "ranking": "top" },
+    "hikari":        { "file": "hikari.html",         "template": "product", "h1": "光回線のおすすめ比較ランキング",                "eyecatch": "assets/img/eyecatch/hikari.png",        "ranking": "hikari" },
+    "home-router":   { "file": "home-router.html",    "template": "product", "h1": "ホームルーターおすすめ比較ランキング",          "eyecatch": "assets/img/eyecatch/home-router.png",   "ranking": "home-router" },
+    "pocket-wifi":   { "file": "pocket-wifi.html",    "template": "product", "h1": "ポケット型WiFiおすすめ比較ランキング",         "eyecatch": "assets/img/eyecatch/pocket-wifi.png",   "ranking": "pocket-wifi" },
+    "norikae":       { "file": "norikae.html",        "template": "product", "h1": "ネット回線の乗り換えおすすめ比較ランキング",    "eyecatch": "assets/img/eyecatch/norikae.png",       "ranking": "norikae" },
+    "sokujitsu":     { "file": "sokujitsu.html",      "template": "product", "h1": "最短即日発送！すぐ使えるネット回線比較",        "eyecatch": "assets/img/eyecatch/sokujitsu.png",     "ranking": "sokujitsu" },
+    "hitorigurashi": { "file": "hitorigurashi.html",  "template": "product", "h1": "一人暮らしにおすすめのネット回線比較",          "eyecatch": "assets/img/eyecatch/hitorigurashi.png", "ranking": "hitorigurashi" },
+    "kazoku-kodate": { "file": "kazoku-kodate.html",  "template": "product", "h1": "家族・戸建て向けネット回線おすすめ比較",        "eyecatch": "assets/img/eyecatch/kazoku-kodate.png", "ranking": "kazoku-kodate" },
+    "gaishutsu":     { "file": "gaishutsu.html",      "template": "product", "h1": "外出先で使えるネット回線おすすめ比較",          "eyecatch": "assets/img/eyecatch/gaishutsu.png",     "ranking": "gaishutsu" },
+    "game":          { "file": "game.html",           "template": "product", "h1": "オンラインゲーム向けネット回線おすすめ比較",    "eyecatch": "assets/img/eyecatch/game.png",          "ranking": "game" },
+    "telework":      { "file": "telework.html",       "template": "product", "h1": "テレワーク・在宅向けネット回線おすすめ比較",    "eyecatch": "assets/img/eyecatch/telework.png",      "ranking": "telework" },
+    "business":      { "file": "business.html",       "template": "product", "h1": "店舗・ビジネス向けネット回線おすすめ比較",      "eyecatch": "assets/img/eyecatch/business.png",      "ranking": "business" },
+    "guide":         { "file": "guide.html",          "template": "article", "h1": "初心者向け｜ネット回線の選び方ガイド",          "eyecatch": "assets/img/eyecatch/guide.png",         "ranking": "guide" }
+  }
+}
