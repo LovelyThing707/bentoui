@@ -485,3 +485,60 @@ strong{font-weight:700}
   .closing{padding:32px 22px}
   .site-footer{padding:34px 0 32px;margin-top:32px}
 }
+
+/* ===== compact ranking card (product/scene/article) — Figma 66:7 / 48:2 ===== */
+.ranking-list{display:grid;gap:12px}
+.rcard{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--sh-card)}
+.rcard.is-first{background:rgba(34,211,238,.05);border:1.5px solid rgba(8,145,178,.45)}
+.rc-row{display:grid;gap:12px}
+.rc-head{display:flex;align-items:center;gap:12px;min-width:0}
+.rc-head .rank-badge{width:34px;height:34px;border-radius:17px;font-size:15px;flex:none}
+.rc-head .rank-badge.grad{background:var(--grad-rank);color:#fff}
+.rc-name{min-width:0}
+.rc-name .mn{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc-name .sub{font-size:12px;color:var(--lo);margin-top:2px}
+.rc-specs{display:grid;grid-template-columns:1fr 1fr;background:var(--well);border-radius:12px;padding:4px}
+.rc-specs .spec-cell{background:transparent;padding:9px 12px;text-align:left}
+.rc-specs .spec-cell .lbl{font-size:10px;color:var(--lo);margin-bottom:2px}
+.rc-specs .spec-cell .val{font-size:14px;font-weight:700;color:var(--ink)}
+.rc-specs .spec-cell.price .val{color:var(--teal);font-family:var(--num)}
+.rc-cta .cta-btn{width:100%}
+.rank-more{margin-top:12px;border-top:1px solid var(--bd)}
+.rank-more>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--teal);list-style:none;padding:10px 0 4px;display:flex;align-items:center;gap:6px}
+.rank-more>summary::-webkit-details-marker{display:none}
+.rank-more>summary::after{content:"▼";font-size:8px}
+.rank-more[open]>summary::after{content:"▲"}
+.rank-more-body{padding-top:8px;display:grid;gap:12px}
+@media(min-width:720px){
+  .rc-row{display:flex;align-items:center;gap:16px}
+  .rc-head{width:200px;flex:none}
+  .rc-specs{display:flex;flex:1;background:transparent;padding:0;border-radius:0}
+  .rc-specs .spec-cell{flex:1;text-align:center;border-left:1px solid var(--bd);padding:6px 8px}
+  .rc-specs .spec-cell:first-child{border-left:0}
+  .rc-cta{width:168px;flex:none}
+}
+
+/* ===== 図解 tile: chip-left horizontal on mobile (Figma SP) ===== */
+.tile .tbody{min-width:0}
+@media(max-width:560px){
+  .tile{display:flex;flex-direction:row;gap:13px;align-items:flex-start;padding:16px}
+  .tile .chip{width:42px;height:42px;margin-bottom:0;flex:none}
+  .tile .chip svg{width:21px;height:21px}
+  .tile h3{font-size:15px;margin-bottom:6px}
+  .tile p{font-size:13.5px}
+  .tile .illus{margin-top:8px}
+}
+
+/* ===== article stepper: badge-left rows on mobile ===== */
+@media(max-width:719px){
+  .step{display:flex;gap:12px;align-items:flex-start}
+  .step .n{margin-bottom:0;flex:none}
+  .step .stbody{flex:1;min-width:0}
+}
+
+/* ===== closing CTA full-width + MV/heading sizes on phones ===== */
+@media(max-width:560px){
+  .mv h1{font-size:22px}
+  .closing .cta-btn{width:100%}
+  .closing h2{font-size:22px}
+}

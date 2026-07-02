@@ -164,22 +164,28 @@ function rankingCard(item, isFirst) {
   const reco = (item.recommendedPeople || []).map((p) => `<li>${esc(p)}</li>`).join("");
   const nreco = (item.notRecommendedPeople || []).map((p) => `<li>${esc(p)}</li>`).join("");
   const key = item.canonicalKey;
-  const badge = isFirst
-    ? `<span class="rank-badge">1<small>総合</small></span>`
-    : `<span class="rank-badge">${esc(item.rank)}</span>`;
-  return `<article class="rank-card ${isFirst ? "is-first" : ""}">
-    <div class="rank-head">${badge}
-      <div class="rank-title"><div class="name">${esc(item.name)}${isFirst ? `<span class="badge-1i">総合1位</span>` : ""}</div>
-      <div class="type">${esc(item.lineType || "")}</div></div>
+  const hasMore = points || item.detail || reco || nreco;
+  const more = hasMore ? `<details class="rank-more">
+      <summary>詳細・おすすめポイントを見る</summary>
+      <div class="rank-more-body">
+        ${points ? `<ul class="rank-points">${points}</ul>` : ""}
+        ${item.detail ? `<p class="rank-detail">${esc(item.detail)}</p>` : ""}
+        ${(reco || nreco) ? `<div class="rank-people">
+          ${reco ? `<div class="box ok"><h4>${I.check}こんな人におすすめ</h4><ul>${reco}</ul></div>` : ""}
+          ${nreco ? `<div class="box ng"><h4>おすすめできない人</h4><ul>${nreco}</ul></div>` : ""}
+        </div>` : ""}
+      </div>
+    </details>` : "";
+  return `<article class="rcard ${isFirst ? "is-first" : ""}">
+    <div class="rc-row">
+      <div class="rc-head">
+        <span class="rank-badge ${isFirst ? "grad" : ""}">${esc(item.rank)}</span>
+        <div class="rc-name"><div class="mn">${esc(item.name)}${isFirst ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(item.lineType || "")}</div></div>
+      </div>
+      <div class="rc-specs">${cells}</div>
+      <div class="rc-cta">${ctaBtn(key, isFirst ? "公式サイトへ" : "公式サイト", isFirst)}</div>
     </div>
-    <div class="spec-grid">${cells}</div>
-    ${points ? `<ul class="rank-points">${points}</ul>` : ""}
-    ${item.detail ? `<p class="rank-detail">${esc(item.detail)}</p>` : ""}
-    ${(reco || nreco) ? `<div class="rank-people">
-      ${reco ? `<div class="box ok"><h4>${I.check}こんな人におすすめ</h4><ul>${reco}</ul></div>` : ""}
-      ${nreco ? `<div class="box ng"><h4>おすすめできない人</h4><ul>${nreco}</ul></div>` : ""}
-    </div>` : ""}
-    <div class="cta-block">${ctaBtn(key, "公式サイトで詳細を見る", true)}</div>
+    ${more}
   </article>`;
 }
 
@@ -198,7 +204,7 @@ function tplProduct(pageKey, page) {
   // ranking cards in canonical order, fall back to extracted order
   let items = order.map((k, i) => byKey[k] ? { ...byKey[k], rank: i + 1, canonicalKey: k } : null).filter(Boolean);
   if (!items.length) items = (d.ranking || []);
-  const tiles = (d.tiles || []).map((t, i) => `<div class="tile"><div class="chip">${I[TILE_ICONS[i % TILE_ICONS.length]]}</div><h3>${esc(cleanTileTitle(t.title))}</h3><p>${esc(cleanBody(t.body))}</p>${t.illustrationNote ? `<div class="illus">${esc(cleanIllus(t.illustrationNote))}</div>` : ""}</div>`).join("");
+  const tiles = (d.tiles || []).map((t, i) => `<div class="tile"><div class="chip">${I[TILE_ICONS[i % TILE_ICONS.length]]}</div><div class="tbody"><h3>${esc(cleanTileTitle(t.title))}</h3><p>${esc(cleanBody(t.body))}</p>${t.illustrationNote ? `<div class="illus">${esc(cleanIllus(t.illustrationNote))}</div>` : ""}</div></div>`).join("");
   const lead = (d.lead && d.lead.paragraphs || []).map((p) => `<p>${mdBold(p)}</p>`).join("");
   const reco = (d.recommendedFor || []).length ? `<div class="reco-card"><h3><span class="chip">${I.check}</span>こんな方におすすめ</h3><ul class="reco-list">${d.recommendedFor.map((r) => `<li>${I.check}<span>${esc(r)}</span></li>`).join("")}</ul></div>` : "";
   const cards = items.map((it, i) => rankingCard(it, i === 0)).join("");
@@ -227,8 +233,7 @@ function tplProduct(pageKey, page) {
 
     <section class="section" id="ranking"><div class="wrap">
       ${secHead("RANKING", d.rankingTitle || page.h1, "実質月額・速度・開通スピードで総合評価")}
-      ${simpleTable(d.simpleTable)}
-      <div class="ranking-list" style="margin-top:16px">${cards}</div>
+      <div class="ranking-list">${cards}</div>
       <p class="rank-disclaimer">※ 掲載の料金・スペックは各社公式情報等をもとにした参考値です。最新の詳細は各公式サイトをご確認ください。</p>
     </div></section>
 
@@ -250,8 +255,8 @@ function tplArticle(pageKey, page) {
   const toc = (d.toc || []).map((t) => `<li><a href="#sec-${esc(String(t).match(/^\d+/) || "")}">${esc(String(t).replace(/^\d+\s*/, ""))}</a></li>`).join("");
   const sections = (d.sections || []).map((s) => {
     const callouts = (s.callouts || []).map((c) => `<div class="callout"><div class="chip">${I.info}</div><div><h4>${esc(c.title || "ポイント")}</h4><p>${mdBold(c.body || "")}</p></div></div>`).join("");
-    const stepper = (s.stepper && s.stepper.length) ? `<div class="stepper">${s.stepper.map((st, i) => `<div class="step"><div class="n">${i + 1}</div><h4>${esc(st.title)}</h4><p>${esc(st.body || "")}</p></div>`).join("")}</div>` : "";
-    const tiles = (s.tiles && s.tiles.length) ? `<div class="tiles cols-3" style="margin:18px 0">${s.tiles.map((t, i) => `<div class="tile"><div class="chip">${I[["router", "home", "mobile"][i % 3]]}</div><h3>${esc(t.title)}</h3><p>${esc(t.body || "")}</p></div>`).join("")}</div>` : "";
+    const stepper = (s.stepper && s.stepper.length) ? `<div class="stepper">${s.stepper.map((st, i) => `<div class="step"><div class="n">${i + 1}</div><div class="stbody"><h4>${esc(st.title)}</h4><p>${esc(st.body || "")}</p></div></div>`).join("")}</div>` : "";
+    const tiles = (s.tiles && s.tiles.length) ? `<div class="tiles cols-3" style="margin:18px 0">${s.tiles.map((t, i) => `<div class="tile"><div class="chip">${I[["router", "home", "mobile"][i % 3]]}</div><div class="tbody"><h3>${esc(t.title)}</h3><p>${esc(t.body || "")}</p></div></div>`).join("")}</div>` : "";
     const body = (typeof s.body === "string" ? s.body.split(/\n{2,}/) : (s.body || [])).map((p) => `<p>${mdBold(p)}</p>`).join("");
     return `<section class="art-sec" id="sec-${esc(s.num || "")}">
       <div class="sh"><div class="n">${esc(s.num || "")}</div><h2>${esc(s.title)}</h2></div>
@@ -266,10 +271,9 @@ function tplArticle(pageKey, page) {
   const byKey = {}; (d.ranking || []).forEach((r) => { if (r.canonicalKey) byKey[r.canonicalKey] = r; });
   let items = order.map((k, i) => byKey[k] ? { ...byKey[k], rank: i + 1, canonicalKey: k } : null).filter(Boolean);
   if (!items.length) items = (d.ranking || []);
-  // section 5 in the guide already titles the ranking, so render just the table + cards here
-  const rankingBlock = items.length ? `<div id="ranking" style="margin-top:22px">
-      ${simpleTable(d.simpleTable)}
-      <div class="ranking-list" style="margin-top:16px">${items.map((it, i) => rankingCard(it, i === 0)).join("")}</div>
+  // section 5 in the guide already titles the ranking, so render just the compact cards here
+  const rankingBlock = items.length ? `<div id="ranking" style="margin-top:18px">
+      <div class="ranking-list">${items.map((it, i) => rankingCard(it, i === 0)).join("")}</div>
       <p class="rank-disclaimer">※ 掲載の料金・スペックは各社公式情報等をもとにした参考値です。最新の詳細は各公式サイトをご確認ください。</p>
     </div>` : "";
   const closeLabel = (d.closing && d.closing.ctaLabel) || "おすすめランキングをもう一度見る";
