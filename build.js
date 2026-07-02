@@ -122,9 +122,10 @@ function dataBlobs(opts) {
     `window.__CTA_CONFIG__=${JSON.stringify({ utmSourceMap: site.ctaRouting.utmSourceMap, default: site.ctaRouting.default })};` +
     `window.__PRODUCT_NAMES__=${JSON.stringify(names)};`;
   if (opts.top) {
+    const T = load("top") || {};
     js += `window.__DIAGNOSIS__=${JSON.stringify({ questions: site.diagnosis.questions, results: site.diagnosis.results })};`;
     js += `window.__SIM__=${JSON.stringify(site.simulator)};`;
-    js += `window.__SD__=${JSON.stringify(site.smartphoneDiscount)};`;
+    js += `window.__SD__=${JSON.stringify((T.sumahoWari && { results: T.sumahoWari.results, eligibleLabel: T.sumahoWari.eligibleLabel }) || {})};`;
   }
   return `<script>${js}</script>`;
 }
@@ -143,8 +144,8 @@ function eyecatch(page, alt) {
   if (!page.eyecatch) return "";
   return `<div class="mv-eyecatch"><img src="${esc(page.eyecatch)}" alt="${esc(alt)}" loading="eager"><span class="eyecatch-badge" data-year-badge></span></div>`;
 }
-function secHead(eyebrowEN, title, sub) {
-  return `<div class="sec-head"><span class="eyebrow"><span class="dot"></span>${esc(eyebrowEN)}</span><h2>${esc(title)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>`;
+function secHead(eyebrowEN, title, sub, accent) {
+  return `<div class="sec-head"><span class="eyebrow ${accent || ""}"><span class="dot"></span>${esc(eyebrowEN)}</span><h2>${esc(title)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>`;
 }
 function ctaBtn(key, label, primary) {
   const url = (site.products[key] && site.products[key].cta[site.ctaRouting.default]) || "#";
@@ -315,104 +316,116 @@ const CARRIER_LABEL = { docomo: "docomo", au: "au", SoftBank: "SoftBank", Rakute
 function tplTop(page) {
   const p = site.products;
   const topKeys = site.rankings.top;
-  const sdRev = reverseSD();
+  const T = load("top") || {};
 
-  const scenes = [
-    ["hitorigurashi", "一人暮らし", "person", "1Rでも快適・低コスト重視"],
-    ["kazoku-kodate", "家族・戸建て", "users", "大容量・高速で家族みんなで"],
-    ["gaishutsu", "外出先", "map", "持ち運びできるモバイル回線"],
-    ["game", "オンラインゲーム", "game", "低Ping・高速・安定重視"],
-    ["telework", "テレワーク・在宅", "briefcase", "Web会議も途切れない安定性"],
-    ["business", "店舗・ビジネス", "home", "法人・店舗向けの回線選び"],
-  ].map(([slug, label, icon, desc]) => `<a class="nav-card" href="${slug}.html"><div class="chip">${I[icon]}</div><h3>${label}</h3><p>${desc}</p><span class="go">ランキングを見る ${I.arrow}</span></a>`).join("");
-
-  const types = [
-    ["hikari", "光回線", "router", "最大10Gbps級", "速度・安定を最優先するなら"],
-    ["home-router", "ホームルーター", "home", "工事不要・コンセントに挿すだけ", "手軽さと速度のバランス型"],
-    ["pocket-wifi", "ポケット型WiFi", "mobile", "持ち運び自由", "外でも家でも1台でカバー"],
-  ].map(([slug, label, icon, speed, desc]) => `<a class="nav-card" href="${slug}.html"><div class="chip">${I[icon]}</div><h3>${label}</h3><div class="speed">${speed}</div><p>${desc}</p><span class="go">比較を見る ${I.arrow}</span></a>`).join("");
-
-  const quick = [
-    ["norikae", "乗り換え違約金サポート", "swap", "違約金を負担してくれる回線だけを厳選"],
-    ["sokujitsu", "お急ぎの方はこちら", "clock", "工事不要・最短即日発送で使える回線"],
-    ["guide", "初心者向け解説ガイド", "book", "回線選びの基本をやさしく解説"],
-  ].map(([slug, label, icon, desc]) => `<a class="nav-card" href="${slug}.html"><div class="chip">${I[icon]}</div><h3>${label}</h3><p>${desc}</p><span class="go">詳しく見る ${I.arrow}</span></a>`).join("");
-
-  // simulator rows (3 products in __SIM__)
-  const simKeys = Object.keys(site.simulator.products);
-  const simRows = simKeys.map((k) => `<div class="sim-row" data-sim-product="${k}"><span class="nm">${esc(p[k].name)}<span class="cheapest" style="display:none">最安</span></span><span class="price num">¥-</span></div>`).join("");
-
-  // TOP5 matrix
-  const matrixRows = topKeys.map((k, i) => {
-    const carriers = (sdRev[k] || []).map((c) => CARRIER_LABEL[c] || c).join("・") || "-";
-    return `<tr class="${i === 0 ? "hl" : ""}"><td class="r num">${i + 1}位</td><td class="nm">${esc(p[k].name)}</td><td>${esc(p[k].type)}</td><td class="price num">¥${Number(p[k].jisshitsu).toLocaleString()}</td><td>${esc(carriers)}</td><td><a class="cta-btn ${i === 0 ? "cta-amber" : "cta-teal"} mini-cta" data-cta data-product="${k}" href="${esc(p[k].cta[site.ctaRouting.default])}" rel="nofollow sponsored noopener" target="_blank">公式サイト</a></td></tr>`;
+  const sceneMeta = [["hitorigurashi", "person"], ["kazoku-kodate", "users"], ["gaishutsu", "map"], ["game", "game"], ["telework", "briefcase"], ["business", "home"]];
+  const scenes = (T.sceneNav.cards || []).map((c, i) => {
+    const [slug, icon] = sceneMeta[i];
+    return `<a class="nav-card" href="${slug}.html"><div class="chip">${I[icon]}</div><h3>${esc(c.label)}</h3><p>${esc(c.desc)}</p><span class="go">${esc(T.sceneNav.link)} ${I.arrow}</span></a>`;
   }).join("");
 
-  // スマホ割 toggle
-  const sdBtns = Object.keys(site.smartphoneDiscount).filter((c) => !c.startsWith("_")).map((c, i) => `<button class="${i === 0 ? "on" : ""}" data-carrier="${esc(c)}">${esc(CARRIER_LABEL[c] || c)}</button>`).join("");
+  const typeMeta = [["hikari", "router"], ["home-router", "home"], ["pocket-wifi", "mobile"]];
+  const types = (T.lineType.cards || []).map((c, i) => {
+    const [slug, icon] = typeMeta[i];
+    return `<a class="nav-card" href="${slug}.html"><div class="chip blue">${I[icon]}</div><h3>${esc(c.label)}</h3><div class="speed">${esc(c.speed)}</div><p>${esc(c.desc)}</p><span class="go blue">${esc(T.lineType.link)} ${I.arrow}</span></a>`;
+  }).join("");
+
+  const quickMeta = [["norikae", "swap"], ["sokujitsu", "clock"], ["guide", "book"]];
+  const quick = (T.quickAccess.cards || []).map((c, i) => {
+    const [slug, icon] = quickMeta[i];
+    return `<a class="nav-card" href="${slug}.html"><div class="chip ${esc(c.accent)}">${I[icon]}</div><h3>${esc(c.label)}</h3><p>${esc(c.desc)}</p><span class="go ${esc(c.accent)}">${esc(c.link)} ${I.arrow}</span></a>`;
+  }).join("");
+
+  // simulator: horizontal 3 cards, prices rendered/updated by main.js from __SIM__
+  const simKeys = Object.keys(site.simulator.products);
+  const simSub = (m) => (T.simulator.sublabel || "実質月額 / {m}ヶ月").replace("{m}", m);
+  const simCards = simKeys.map((k) => `<div class="sim-card" data-sim-product="${k}"><div class="nm">${esc(p[k].name)}<span class="cheapest" style="display:none">最安</span></div><div class="price num">¥-</div><div class="sub" data-sim-sub>${esc(simSub("12"))}</div></div>`).join("");
+
+  // TOP5 matrix: 実質月額 from Excel (products.jisshitsu); 通信速度/開通/工事/種別 from Figma (T.topMatrix.matrix)
+  const mx = (T.topMatrix && T.topMatrix.matrix) || {};
+  const matrixRows = topKeys.map((k, i) => {
+    const m = mx[k] || {};
+    const pos = m.positive ? "pos" : "";
+    const first = i === 0;
+    return `<tr class="${first ? "hl" : ""}">
+      <td class="rankcell"><span class="rank-badge sm ${first ? "grad" : ""}">${i + 1}</span></td>
+      <td class="nm"><div class="mn">${esc(p[k].name)}</div><div class="sub">${esc(m.type || p[k].type)}</div></td>
+      <td class="price num">¥${Number(p[k].jisshitsu).toLocaleString()}<div class="sub">${esc(T.topMatrix.priceSub || "")}</div></td>
+      <td class="rating num"><span class="star">★</span> ${esc(m.rating || "-")}</td>
+      <td class="${pos}">${esc(m.opening || "-")}</td>
+      <td class="${pos}">${esc(m.construction || "-")}</td>
+      <td><a class="cta-btn ${first ? "cta-amber" : "cta-teal"} mini-cta" data-cta data-product="${k}" href="${esc(p[k].cta[site.ctaRouting.default])}" rel="nofollow sponsored noopener" target="_blank">公式サイト</a></td>
+    </tr>`;
+  }).join("");
+
+  // スマホ割 toggle (SoftBank active by default per Figma)
+  const sdDef = (T.sumahoWari && T.sumahoWari.defaultCarrier) || "SoftBank";
+  const sdBtns = Object.keys(site.smartphoneDiscount).filter((c) => !c.startsWith("_")).map((c) => `<button class="${c === sdDef ? "on" : ""}" data-carrier="${esc(c)}">${esc(CARRIER_LABEL[c] || c)}</button>`).join("");
 
   const pick = topKeys[0];
+  const pickTags = (T.editorPick.tags || []).map((t) => `<span class="ptag ${esc(t.color)}">${esc(t.text)}</span>`).join("");
 
   return head(page, "ネット回線比較.com｜実質月額で選ぶ、失敗しないネット回線ランキング", "光回線・ホームルーター・ポケット型WiFiを実質月額で徹底比較。3秒セルフ診断であなたに最適な回線が見つかります。") + header() +
   `<main>
     <section class="hero"><div class="wrap">
-      <span class="eyebrow-pill"><span class="star">★</span><span data-ym></span> 最新版ランキング</span>
-      <h1>3秒でわかる、<br>あなたに最適なネット回線。</h1>
-      <p class="sub">光回線・ホームルーター・ポケット型WiFiを「実質月額」で徹底比較。セルフ診断とシミュレーターで、迷わず選べます。</p>
+      <p class="promo-line">${esc(site.site.promoLine)}</p>
+      <span class="eyebrow-pill"><span class="pdot"></span><span data-ym></span> ${esc(T.hero.eyebrowPill)}</span>
+      <h1>${esc(T.hero.h1Line1)}<br>${esc(T.hero.h1Line2)}</h1>
+      <p class="sub">${esc(T.hero.sub)}</p>
 
       <div class="bento">
         <!-- diagnosis dark tile -->
         <div class="diag-tile" id="diagnosis">
-          <div class="head"><span class="chip">${I.wifi}</span><div><span class="eyebrow">SELF CHECK</span><h2>3秒判定セルフ診断</h2><p>かんたんな質問に答えるだけ</p></div></div>
+          <div class="head"><span class="chip">${I.wifi}</span><div><span class="eyebrow">SELF CHECK</span><h2>3秒判定セルフ診断</h2><p>${esc(T.diagnosisSub)}</p></div></div>
           <div class="diag-panel"><!-- rendered by diagnosis.js --></div>
         </div>
         <div class="bento-right">
           <!-- simulator -->
           <div class="wtile" id="simulator">
-            <div class="thead"><div class="t"><span class="chip chip-blue">${I.coin}</span><div><span class="eyebrow">PRICE SIMULATOR</span><h2>期間別・実質月額シミュレーター</h2></div></div>
+            <div class="thead"><div class="t"><span class="chip chip-blue">${I.coin}</span><div><span class="eyebrow">PRICE SIMULATOR</span><h2>${esc(T.simulator.title)}</h2></div></div>
               <div class="sim-toggle"><button class="on" data-month="12">12ヶ月</button><button data-month="24">24ヶ月</button><button data-month="36">36ヶ月</button></div>
             </div>
-            <div class="sim-rows">${simRows}</div>
-            <p class="sim-note">※ 実質月額＝契約期間で割った月あたりの総支払額（キャッシュバック等反映）。利用期間が長いほど平均は上がります。</p>
+            <div class="sim-cards">${simCards}</div>
+            <p class="sim-note">${esc(T.simulator.note)}</p>
           </div>
           <!-- editor pick -->
           <div class="wtile">
-            <div class="thead"><div class="t"><span class="chip chip-amber">★</span><div><span class="eyebrow">EDITOR'S PICK</span><h2>今月のおすすめ回線</h2></div></div><a class="pick-link" href="#ranking">ランキングを見る ${I.arrow}</a></div>
+            <div class="thead"><div class="t"><span class="chip chip-amber">★</span><div><span class="eyebrow">EDITOR'S PICK</span><h2>${esc(T.editorPick.title)}</h2></div></div><a class="pick-link" href="#comparison-matrix" data-scroll="#comparison-matrix">${esc(T.editorPick.link)} ${I.arrow}</a></div>
             <div class="pick-row">
               <span class="badge num">1</span>
               <div><div class="pnm">${esc(p[pick].name)}</div><div class="type" style="font-size:12.5px;color:var(--lo)">${esc(p[pick].type)}</div></div>
-              ${ctaBtn(pick, "公式サイトへ", true)}
-              <div class="pick-tags"><span class="ptag teal">実質¥${Number(p[pick].jisshitsu).toLocaleString()}〜</span><span class="ptag green">工事なし</span><span class="ptag mid">最短翌日発送</span></div>
+              ${ctaBtn(pick, T.editorPick.cta, true)}
+              <div class="pick-tags">${pickTags}</div>
             </div>
-            <p class="pick-foot">2位以下の詳細は下記の「最新TOP5 徹底比較表」でチェックできます。</p>
+            <p class="pick-foot">${esc(T.editorPick.footnote)}</p>
           </div>
         </div>
       </div>
     </div></section>
 
     <section class="section" id="ranking"><div class="wrap">
-      ${secHead("USE CASE", "利用シーン別ランキング", "あなたの使い方にぴったりの回線を")}
+      ${secHead("USE CASE", T.sceneNav.title, T.sceneNav.sub)}
       <div class="nav-grid scene">${scenes}</div>
     </div></section>
 
     <section class="section"><div class="wrap">
-      ${secHead("LINE TYPE", "回線タイプ別の比較", "3つのタイプから選ぶ")}
+      ${secHead("LINE TYPE", T.lineType.title, T.lineType.sub, "blue")}
       <div class="nav-grid type">${types}</div>
     </div></section>
 
     <section class="section" id="comparison-matrix"><div class="wrap">
-      ${secHead("RANKING", "最新TOP5 徹底比較表", "総合ランキング上位5回線を実質月額で比較")}
-      <div class="matrix-wrap"><table class="matrix"><thead><tr><th>順位</th><th>回線</th><th>タイプ</th><th>実質月額</th><th>スマホセット割</th><th>お申込み</th></tr></thead><tbody>${matrixRows}</tbody></table></div>
+      ${secHead("RANKING", T.topMatrix.title, T.topMatrix.sub)}
+      <div class="matrix-wrap"><table class="matrix top5"><thead><tr><th></th><th>回線・種別</th><th>実質月額(12ヶ月)</th><th>通信速度</th><th>開通</th><th>工事</th><th>お申込み</th></tr></thead><tbody>${matrixRows}</tbody></table></div>
+      <p class="rank-disclaimer">${esc(T.topMatrix.disclaimer)}</p>
     </div></section>
 
     <section class="section" id="sumaho-wari"><div class="wrap">
-      ${secHead("SET DISCOUNT", "スマホセット割チェッカー", "お使いのスマホキャリアで選ぶ")}
+      ${secHead("SET DISCOUNT", T.sumahoWari.title, T.sumahoWari.sub, "green")}
       <div class="sd-toggle">${sdBtns}</div>
       <div class="sd-result"><!-- rendered by main.js --></div>
     </div></section>
 
     <section class="section"><div class="wrap">
-      ${secHead("QUICK ACCESS", "目的別・クイックアクセス", "お急ぎの方はこちらから")}
       <div class="nav-grid quick">${quick}</div>
     </div></section>
   </main>` + foot({ top: true });

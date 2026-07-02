@@ -274,6 +274,16 @@ strong{font-weight:700}
 .sim-row .cheapest{background:var(--teal);color:#fff;font-size:10px;font-weight:700;border-radius:5px;padding:2px 6px}
 .sim-row .price{font-family:var(--num);font-weight:900;font-size:26px;color:var(--ink)}
 .sim-row.best .price{color:var(--teal)}
+/* horizontal 3-card simulator (Figma layout) */
+.sim-cards{display:grid;gap:12px}
+@media(min-width:560px){ .sim-cards{grid-template-columns:repeat(3,1fr)} }
+.sim-card{background:var(--well);border-radius:14px;padding:16px 16px 14px;text-align:left}
+.sim-card.best{background:rgba(34,211,238,.07);border:1px solid rgba(8,145,178,.5)}
+.sim-card .nm{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.sim-card .cheapest{background:var(--teal);color:#fff;font-size:10px;font-weight:700;border-radius:5px;padding:2px 6px;font-family:var(--num)}
+.sim-card .price{font-family:var(--num);font-weight:900;font-size:28px;color:var(--ink);line-height:1}
+.sim-card.best .price{color:var(--teal)}
+.sim-card .sub{font-size:11px;color:var(--lo);margin-top:6px}
 .sim-note{font-size:11px;color:var(--fine);margin-top:12px}
 /* editor pick */
 .pick-link{margin-left:auto;font-size:13px;color:var(--teal);font-weight:700}
@@ -383,3 +393,36 @@ strong{font-weight:700}
 .mobile-menu{display:none}
 .mobile-menu.open{display:block;background:var(--card);border-bottom:1px solid var(--bd)}
 .mobile-menu a{display:block;padding:14px 20px;border-bottom:1px solid var(--bd);font-weight:500;color:var(--mid)}
+
+/* ===== TOP-page Figma-fidelity additions ===== */
+/* hero eyebrow pill dot (was a ★) + section accent eyebrows */
+.eyebrow-pill .pdot{width:7px;height:7px;border-radius:50%;background:var(--cyan);display:inline-block;flex:none}
+.eyebrow.blue{color:var(--blue)} .eyebrow.blue .dot{background:var(--blue)}
+.eyebrow.green{color:var(--green)} .eyebrow.green .dot{background:var(--green)}
+.hero .promo-line{margin-bottom:12px}
+/* nav-card chip + link accents per section */
+.nav-card .chip.blue{background:rgba(37,99,235,.1);color:var(--blue)}
+.nav-card .chip.amber{background:rgba(245,158,11,.14);color:var(--amber)}
+.nav-card .chip.green{background:rgba(5,150,105,.12);color:var(--green)}
+.nav-card .chip.teal{background:rgba(8,145,178,.1);color:var(--teal)}
+.go.blue{color:var(--blue)} .go.amber{color:var(--amber)} .go.green{color:var(--green)}
+/* TOP5 matrix (Figma columns: rank / 回線・種別 / 実質月額 / 通信速度 / 開通 / 工事 / 申込) */
+.matrix.top5{min-width:760px}
+.matrix .rankcell{width:52px}
+.matrix .rank-badge{width:28px;height:28px;border-radius:14px;font-size:13px;margin:0 auto}
+.matrix .rank-badge.grad{background:var(--grad-rank);color:#fff}
+.matrix td.nm .mn{font-weight:700;color:var(--ink)}
+.matrix td.nm .sub,.matrix td.price .sub{font-size:11px;color:var(--lo);font-weight:400;margin-top:2px}
+.matrix td.price{color:var(--teal)}
+.matrix td.rating{white-space:nowrap;font-weight:700;color:var(--ink)}
+.matrix td.rating .star{color:var(--amber)}
+.matrix td.pos{color:var(--green);font-weight:700}
+/* スマホ割 result (headline + amount + eligible pills) */
+.sd-result .hit{display:flex;align-items:flex-start;gap:12px;margin-bottom:0;color:var(--ink);font-weight:400}
+.sd-result .ck{width:36px;height:36px;border-radius:10px;background:rgba(5,150,105,.12);color:var(--green);display:grid;place-items:center;flex:none}
+.sd-result .ck svg{width:20px;height:20px}
+.sd-result .hd{font-weight:700;font-size:15px;color:var(--ink);margin-bottom:3px}
+.sd-result .am{font-size:13.5px;color:var(--mid);line-height:1.6}
+.sd-result .am .hl{color:var(--green);font-weight:700}
+.sd-elig{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:16px;padding-top:16px}
+.sd-elig .lbl{font-size:12.5px;color:var(--lo);font-weight:700}

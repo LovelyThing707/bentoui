@@ -1,0 +1,83 @@
+{
+  "_note": "TOP-page content extracted verbatim from Figma node 34:2. Matrix 実質月額 is pulled from products.*.jisshitsu (Excel); rating/opening/construction/type here are the editorial values from Figma (not in Excel).",
+  "hero": {
+    "eyebrowPill": "最新版ランキング",
+    "h1Line1": "3秒でわかる、あなたに",
+    "h1Line2": "最適なネット回線。",
+    "sub": "光回線・ホームルーター・ポケット型WiFiを、実質月額・速度・開通スピードで徹底比較。今月、本当に選ばれている回線がひと目で分かります。"
+  },
+  "diagnosisSub": "5つの質問に答えるだけで、あなたに最適な回線が分かります。",
+  "simulator": {
+    "title": "期間別・実質月額料金比較",
+    "sublabel": "実質月額 / {m}ヶ月",
+    "note": "※ 実質月額＝総支払額（基本料金＋初期費用−キャッシュバック）÷ 利用月数"
+  },
+  "editorPick": {
+    "title": "今月のおすすめネット回線",
+    "link": "ランキングを見る",
+    "tags": [
+      { "text": "実質 ¥100", "color": "teal" },
+      { "text": "最短翌日", "color": "mid" },
+      { "text": "工事なし", "color": "green" },
+      { "text": "データ無制限", "color": "green" }
+    ],
+    "cta": "公式サイトへ",
+    "footnote": "2位 BroadWiMAX　／　3位 J:COM　ほか、TOP5を徹底比較"
+  },
+  "sceneNav": {
+    "title": "利用シーン別ランキング",
+    "sub": "あなたのライフスタイルに合った回線を、シーン別のランキングからチェックできます。",
+    "link": "ランキングを見る",
+    "cards": [
+      { "label": "一人暮らし", "desc": "コスパ重視" },
+      { "label": "家族・戸建て", "desc": "安定性・同時接続" },
+      { "label": "外出先利用", "desc": "モバイル重視" },
+      { "label": "オンラインゲーム", "desc": "超低遅延・大容量" },
+      { "label": "テレワーク・在宅", "desc": "ビデオ会議・大容量" },
+      { "label": "店舗・ビジネス", "desc": "複数人・来客用" }
+    ]
+  },
+  "lineType": {
+    "title": "回線タイプ別の比較",
+    "sub": "光回線・ホームルーター・ポケット型WiFiの違いから選べます。",
+    "link": "ランキングを見る",
+    "cards": [
+      { "label": "光回線", "speed": "実測 約300〜600Mbps", "desc": "オンラインゲームや家族の同時接続も快適。完全無制限で最も安定した回線。" },
+      { "label": "ホームルーター", "speed": "実測 約100〜250Mbps", "desc": "工事不要、コンセントに挿すだけ。賃貸住まいや引っ越しが多い方に最適。" },
+      { "label": "ポケット型WiFi", "speed": "実測 約30〜100Mbps", "desc": "手のひらサイズで持ち運び自由。家でも外でも、これ1台で通信を完結。" }
+    ]
+  },
+  "topMatrix": {
+    "title": "最新TOP5 徹底比較表",
+    "sub": "実質月額・通信速度・開通スピードを総合評価。今月の総合1位は「モバレコAir」です。",
+    "priceSub": "実質月額 / 月",
+    "disclaimer": "※ 表示の実質月額・速度・評価は各社公式情報および当サイト独自の基準に基づき作成しています。最新の料金・キャンペーンは必ず公式サイトでご確認ください。",
+    "matrix": {
+      "mobareco-air":    { "type": "ホームルーター",               "rating": "4.5", "opening": "最短翌日", "construction": "なし", "positive": true },
+      "broad-wimax":     { "type": "ポケット型WiFi・ホームルーター", "rating": "4.8", "opening": "最短翌日", "construction": "なし", "positive": true },
+      "jcom":            { "type": "光回線",                       "rating": "4.9", "opening": "約1ヶ月", "construction": "あり", "positive": false },
+      "softbank-hikari": { "type": "光回線",                       "rating": "5.0", "opening": "約1ヶ月", "construction": "あり", "positive": false },
+      "docomo-hikari":   { "type": "光回線",                       "rating": "5.0", "opening": "約1ヶ月", "construction": "あり", "positive": false }
+    }
+  },
+  "sumahoWari": {
+    "title": "スマホセット割チェッカー",
+    "sub": "お使いのスマホキャリアで、毎月の通信費が安くなる回線をチェックできます。",
+    "eligibleLabel": "セット割対象：",
+    "defaultCarrier": "SoftBank",
+    "results": {
+      "docomo":   { "headline": "docomo をお使いなら",         "amount": "ドコモ光セット割で毎月最大 {hl} のセット割対象です。",       "highlight": "¥1,100 OFF", "eligible": ["ドコモ光"] },
+      "au":       { "headline": "au・UQ mobile をお使いなら",   "amount": "auスマートバリュー等で毎月最大 {hl} のセット割対象です。",     "highlight": "¥1,100 OFF", "eligible": ["BroadWiMAX", "J:COM"] },
+      "SoftBank": { "headline": "SoftBank・Y!mobile をお使いなら", "amount": "おうち割で毎月最大 {hl} のセット割対象です。",             "highlight": "¥1,100 OFF", "eligible": ["モバレコAir", "ソフトバンク光"] },
+      "Rakuten":  { "headline": "楽天モバイル をお使いなら",     "amount": "対象回線でセット割・キャンペーンが利用できます。",           "highlight": null,          "eligible": ["モバレコAir", "BroadWiMAX"] },
+      "格安SIM":  { "headline": "格安SIM をお使いなら",         "amount": "対象回線でお得なキャンペーンが利用できます。",               "highlight": null,          "eligible": ["モバレコAir", "BroadWiMAX"] }
+    }
+  },
+  "quickAccess": {
+    "cards": [
+      { "label": "乗り換え違約金サポート", "desc": "他社の解約金・違約金を実質0円にできる回線だけを厳選して掲載。", "link": "対象ランキングを見る", "accent": "teal" },
+      { "label": "お急ぎの方はこちら",     "desc": "工事不要・最短翌日開通に対応した、今日申し込める回線をチェック。", "link": "対象ランキングを見る", "accent": "amber" },
+      { "label": "初心者向け解説ガイド",   "desc": "「実質月額」のカラクリや選び方を、プロがどこよりも優しく図解。", "link": "対象ランキングを見る", "accent": "blue" }
+    ]
+  }
+}

@@ -29,7 +29,7 @@
       '<div class="diag-step"><span class="s">STEP ' + (idx + 1) + " / " + total + '</span><span class="diag-dots">' + dots + "</span></div>" +
       '<div class="diag-q">' + esc(q.label) + "</div>" +
       '<div class="diag-opts">' + opts + "</div>" +
-      '<div class="diag-hint">Q1の回答で最適な回線を判定します。所要時間はわずか3秒。</div>';
+      '<div class="diag-hint">回答はいつでもやり直せます。結果は最短3秒で表示。</div>';
     panel.querySelectorAll(".diag-opt").forEach(function (b) {
       b.addEventListener("click", function () { choose(q, +b.getAttribute("data-i")); });
     });
