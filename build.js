@@ -358,6 +358,25 @@ function tplTop(page) {
     </tr>`;
   }).join("");
 
+  // TOP5 as stacked cards on mobile (Figma SP renders the table as 5 cards)
+  const matrixCards = topKeys.map((k, i) => {
+    const m = mx[k] || {};
+    const first = i === 0;
+    const pos = m.positive ? "pos" : "";
+    return `<article class="t5card ${first ? "is-first" : ""}">
+      <div class="t5head"><span class="rank-badge ${first ? "grad" : ""}">${i + 1}</span>
+        <div class="t5name"><div class="mn">${esc(p[k].name)}${first ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(m.type || p[k].type)}</div></div>
+      </div>
+      <div class="t5specs">
+        <div class="t5cell"><div class="l">実質月額</div><div class="v price num">¥${Number(p[k].jisshitsu).toLocaleString()}</div></div>
+        <div class="t5cell"><div class="l">通信速度</div><div class="v"><span class="star">★</span> ${esc(m.rating || "-")}</div></div>
+        <div class="t5cell"><div class="l">開通</div><div class="v ${pos}">${esc(m.opening || "-")}</div></div>
+        <div class="t5cell"><div class="l">工事</div><div class="v ${pos}">${esc(m.construction || "-")}</div></div>
+      </div>
+      <a class="cta-btn ${first ? "cta-amber" : "cta-teal"} t5cta" data-cta data-product="${k}" href="${esc(p[k].cta[site.ctaRouting.default])}" rel="nofollow sponsored noopener" target="_blank">公式サイト${first ? "へ" : ""}</a>
+    </article>`;
+  }).join("");
+
   // スマホ割 toggle (SoftBank active by default per Figma)
   const sdDef = (T.sumahoWari && T.sumahoWari.defaultCarrier) || "SoftBank";
   const sdBtns = Object.keys(site.smartphoneDiscount).filter((c) => !c.startsWith("_")).map((c) => `<button class="${c === sdDef ? "on" : ""}" data-carrier="${esc(c)}">${esc(CARRIER_LABEL[c] || c)}</button>`).join("");
@@ -416,6 +435,7 @@ function tplTop(page) {
     <section class="section" id="comparison-matrix"><div class="wrap">
       ${secHead("RANKING", T.topMatrix.title, T.topMatrix.sub)}
       <div class="matrix-wrap"><table class="matrix top5"><thead><tr><th></th><th>回線・種別</th><th>実質月額(12ヶ月)</th><th>通信速度</th><th>開通</th><th>工事</th><th>お申込み</th></tr></thead><tbody>${matrixRows}</tbody></table></div>
+      <div class="top5-cards">${matrixCards}</div>
       <p class="rank-disclaimer">${esc(T.topMatrix.disclaimer)}</p>
     </div></section>
 

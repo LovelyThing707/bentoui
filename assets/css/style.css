@@ -302,8 +302,7 @@ strong{font-weight:700}
 
 /* nav grids (scene / type / quick) */
 .nav-grid{display:grid;gap:16px}
-.nav-grid.scene{grid-template-columns:1fr}
-@media(min-width:600px){ .nav-grid.scene{grid-template-columns:1fr 1fr} }
+.nav-grid.scene{grid-template-columns:1fr 1fr}
 @media(min-width:900px){ .nav-grid.scene{grid-template-columns:repeat(3,1fr)} }
 .nav-grid.type{grid-template-columns:1fr}
 @media(min-width:760px){ .nav-grid.type{grid-template-columns:repeat(3,1fr)} }
@@ -426,3 +425,63 @@ strong{font-weight:700}
 .sd-result .am .hl{color:var(--green);font-weight:700}
 .sd-elig{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:16px;padding-top:16px}
 .sd-elig .lbl{font-size:12.5px;color:var(--lo);font-weight:700}
+
+/* ===== TOP5 as stacked cards on mobile (Figma SP 48:2) ===== */
+.top5-cards{display:none}
+.t5card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--sh-card);display:grid;gap:12px}
+.t5card.is-first{background:rgba(34,211,238,.05);border:1.5px solid rgba(8,145,178,.45)}
+.t5head{display:flex;align-items:center;gap:12px}
+.t5head .rank-badge{width:34px;height:34px;border-radius:17px;font-size:15px;flex:none}
+.t5head .rank-badge.grad{background:var(--grad-rank);color:#fff}
+.t5name .mn{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.t5name .sub{font-size:12px;color:var(--lo);margin-top:2px}
+.t5specs{display:grid;grid-template-columns:1fr 1fr;background:var(--well);border-radius:12px;padding:4px}
+.t5cell{padding:9px 12px}
+.t5cell .l{font-size:10px;color:var(--lo);margin-bottom:2px}
+.t5cell .v{font-size:15px;font-weight:700;color:var(--ink)}
+.t5cell .v.price{color:var(--teal);font-family:var(--num)}
+.t5cell .v.pos{color:var(--green)}
+.t5cell .v .star{color:var(--amber)}
+.t5card .t5cta{width:100%}
+
+@media(max-width:767px){
+  .matrix-wrap{display:none}
+  .top5-cards{display:grid;gap:12px}
+}
+
+/* ===== phone-only reflow (≤560px) matching Figma SP ===== */
+@media(max-width:560px){
+  /* simulator: name-left / price-right compact rows */
+  .sim-cards{gap:10px}
+  .sim-card{display:grid;grid-template-columns:1fr auto;grid-template-areas:"nm price" "sub price";column-gap:12px;align-items:center;padding:13px 16px}
+  .sim-card .nm{grid-area:nm;margin-bottom:0}
+  .sim-card .sub{grid-area:sub;margin-top:2px}
+  .sim-card .price{grid-area:price;font-size:22px;align-self:center}
+  /* full-width segmented toggle */
+  .wtile .thead .sim-toggle{display:flex;width:100%;margin-top:4px}
+  .sim-toggle button{flex:1}
+  /* compact scene cards (2-up) */
+  .nav-grid.scene .nav-card{padding:16px 14px}
+  .nav-grid.scene .nav-card .chip{width:38px;height:38px;margin-bottom:10px}
+  .nav-grid.scene .nav-card h3{font-size:14px}
+  .nav-grid.scene .nav-card p{font-size:11.5px;margin-bottom:8px}
+  .nav-grid.scene .nav-card .go{font-size:11.5px}
+  /* header: opaque white + smaller logo */
+  .site-header{background:#fff}
+  .site-header .wrap{height:56px}
+  .logo .mark{width:30px;height:30px}
+  .logo .word{font-size:16px}
+  /* tighter vertical rhythm to match Figma SP density */
+  .section{padding:28px 0}
+  .hero{padding-top:18px}
+  .hero h1{font-size:25px;margin:14px 0 10px}
+  .bento{margin-top:16px;gap:14px}
+  .sec-head{margin-bottom:16px}
+  .sec-head h2{font-size:21px}
+  .sec-head p{font-size:12.5px}
+  .diag-tile{padding:20px}
+  .wtile{padding:18px}
+  .nav-grid{gap:12px}
+  .closing{padding:32px 22px}
+  .site-footer{padding:34px 0 32px;margin-top:32px}
+}
