@@ -55,12 +55,13 @@
     panel.innerHTML =
       '<div class="diag-result show">' +
         '<div class="logo-badge"><div class="k">あなたにおすすめの回線</div><div class="n">' + esc(nm) + "</div></div>" +
-        '<a class="cta-btn cta-amber cta-block" href="' + esc(href) + '" rel="nofollow sponsored noopener" target="_blank">公式サイトで詳細を見る</a>' +
+        '<a class="cta-btn cta-amber cta-block" data-cta data-product="' + esc(resultKey) + '" href="' + esc(href) + '" rel="nofollow sponsored noopener" target="_blank">公式サイトで詳細を見る</a>' +
         '<button class="diag-restart" type="button">もう一度診断する</button>' +
       "</div>";
     panel.querySelector(".diag-restart").addEventListener("click", function () {
       idx = 0; resultKey = null; renderQuestion();
     });
+    if (window.dl) window.dl({ event: "diagnosis_complete", result: resultKey, result_name: nm });
   }
 
   renderQuestion();

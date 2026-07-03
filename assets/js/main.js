@@ -55,6 +55,7 @@
         btns.forEach(function (x) { x.classList.remove("on"); });
         b.classList.add("on");
         update(b.getAttribute("data-month"));
+        if (window.dl) window.dl({ event: "simulator_toggle", months: Number(b.getAttribute("data-month")) });
       });
     });
     update((wrap.querySelector(".sim-toggle button.on") || btns[0]).getAttribute("data-month"));
@@ -85,6 +86,7 @@
         btns.forEach(function (x) { x.classList.remove("on"); });
         b.classList.add("on");
         update(b.getAttribute("data-carrier"));
+        if (window.dl) window.dl({ event: "sumaho_wari_select", carrier: b.getAttribute("data-carrier") });
       });
     });
     var on = wrap.querySelector(".sd-toggle button.on") || btns[0];

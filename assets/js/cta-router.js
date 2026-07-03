@@ -60,4 +60,37 @@
       a.setAttribute("target", "_blank");
     }
   });
+
+  /* ---------- analytics: GTM dataLayer events ---------- */
+  var NAMES = window.__PRODUCT_NAMES__ || {};
+  var PAGE = window.__PAGE__ || ((location.pathname.split("/").pop() || "index").replace(/\.html$/, "") || "index");
+  function dl(o) { (window.dataLayer = window.dataLayer || []).push(o); }
+  window.dl = dl;          // shared helper for diagnosis.js / main.js
+  window.__ctaSource = src;
+  window.__ctaPage = PAGE;
+
+  function placementOf(el) {
+    if (el.closest(".diag-result")) return "diagnosis_result";
+    if (el.closest(".pick-row")) return "editor_pick";
+    if (el.closest(".matrix")) return "top5_matrix";
+    if (el.closest(".t5card")) return "top5_card";
+    if (el.closest(".rcard")) return "ranking";
+    return "other";
+  }
+
+  // delegated so dynamically-added CTAs (diagnosis result) are tracked too
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("[data-cta]") : null;
+    if (!a) return;
+    var key = a.getAttribute("data-product");
+    dl({
+      event: "affiliate_click",
+      product: key,
+      product_name: NAMES[key] || key,
+      ad_source: src,
+      placement: placementOf(a),
+      page: PAGE,
+      href: a.href
+    });
+  });
 })();

@@ -119,7 +119,8 @@ function dataBlobs(opts) {
   opts = opts || {};
   const cta = {}, names = {};
   for (const k in site.products) { if (k === "_note") continue; cta[k] = site.products[k].cta; names[k] = site.products[k].name; }
-  let js = `window.__SITE__=${JSON.stringify({ badgeFormat: site.site.eyecatchBadge.format })};` +
+  let js = (opts.page ? `window.__PAGE__=${JSON.stringify(opts.page)};` : "") +
+    `window.__SITE__=${JSON.stringify({ badgeFormat: site.site.eyecatchBadge.format })};` +
     `window.__CTA__=${JSON.stringify(cta)};` +
     `window.__CTA_CONFIG__=${JSON.stringify({ utmSourceMap: site.ctaRouting.utmSourceMap, default: site.ctaRouting.default })};` +
     `window.__PRODUCT_NAMES__=${JSON.stringify(names)};`;
@@ -252,7 +253,7 @@ function tplProduct(pageKey, page) {
         <p class="micro"><a href="index.html#diagnosis" style="color:var(--cyan)">3秒セルフ診断で自分に最適な回線を調べる →</a></p>
       </div>
     </div></section>
-  </main>` + foot({});
+  </main>` + foot({ page: pageKey });
 }
 
 /* ---------- template: article (解説ガイド) ---------- */
@@ -458,7 +459,7 @@ function tplTop(page) {
     <section class="section"><div class="wrap">
       <div class="nav-grid quick">${quick}</div>
     </div></section>
-  </main>` + foot({ top: true });
+  </main>` + foot({ top: true, page: "top" });
 }
 
 /* ---------- run ---------- */
