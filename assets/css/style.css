@@ -61,7 +61,7 @@ strong{font-weight:700}
 
 /* ---------- header ---------- */
 .site-header{position:sticky;top:0;z-index:50;background:rgba(244,246,250,.85);
-  backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--bd)}
+  -webkit-backdrop-filter:saturate(1.2) blur(10px);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--bd)}
 .site-header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .logo{display:inline-flex;align-items:center;gap:10px}
 .logo .mark{width:36px;height:36px;border-radius:10px;background:var(--grad-logo);

@@ -211,7 +211,8 @@ function tplProduct(pageKey, page) {
   // ranking cards in canonical order, fall back to extracted order
   let items = order.map((k, i) => byKey[k] ? { ...byKey[k], rank: i + 1, canonicalKey: k } : null).filter(Boolean);
   if (!items.length) items = (d.ranking || []);
-  const tiles = (d.tiles || []).map((t, i) => `<div class="tile"><div class="chip">${I[TILE_ICONS[i % TILE_ICONS.length]]}</div><div class="tbody"><h3>${esc(cleanTileTitle(t.title))}</h3><p>${esc(cleanBody(t.body))}</p>${t.illustrationNote ? `<div class="illus">${esc(cleanIllus(t.illustrationNote))}</div>` : ""}</div></div>`).join("");
+  // note: t.illustrationNote is an internal art-direction brief ("（図解：…のイラスト）"), not user copy — do NOT render it (matches Figma: chip + title + body only)
+  const tiles = (d.tiles || []).map((t, i) => `<div class="tile"><div class="chip">${I[TILE_ICONS[i % TILE_ICONS.length]]}</div><div class="tbody"><h3>${esc(cleanTileTitle(t.title))}</h3><p>${esc(cleanBody(t.body))}</p></div></div>`).join("");
   const lead = (d.lead && d.lead.paragraphs || []).map((p) => `<p>${mdBold(p)}</p>`).join("");
   const reco = (d.recommendedFor || []).length ? `<div class="reco-card"><h3>こんな方におすすめ</h3><ul class="reco-list">${d.recommendedFor.map((r) => `<li>${I.check}<span>${esc(r)}</span></li>`).join("")}</ul></div>` : "";
   const cards = items.map((it, i) => rankingCard(it, i === 0)).join("");
