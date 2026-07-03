@@ -64,6 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${gtm}');</script>
 <!-- End Google Tag Manager -->
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Noto+Sans+JP:wght@350;400;500;700;900&display=swap" rel="stylesheet">
@@ -143,7 +144,11 @@ function foot(opts) { return footer() + scripts(opts) + "\n</body>\n</html>"; }
 /* ---------- shared components ---------- */
 function eyecatch(page, alt) {
   if (!page.eyecatch) return "";
-  return `<div class="mv-eyecatch"><img src="${esc(page.eyecatch)}" alt="${esc(alt)}" loading="eager"><span class="eyecatch-badge" data-year-badge></span></div>`;
+  const base = esc(page.eyecatch.replace(/\.png$/, ""));
+  return `<div class="mv-eyecatch"><picture>` +
+    `<source type="image/webp" srcset="${base}-800.webp 800w, ${base}-1600.webp 1600w" sizes="(max-width:880px) 92vw, 1160px">` +
+    `<img src="${esc(page.eyecatch)}" alt="${esc(alt)}" width="1672" height="941" loading="eager" fetchpriority="high" decoding="async">` +
+    `</picture><span class="eyecatch-badge" data-year-badge></span></div>`;
 }
 function secHead(eyebrowEN, title, sub, accent) {
   return `<div class="sec-head"><span class="eyebrow ${accent || ""}"><span class="dot"></span>${esc(eyebrowEN)}</span><h2>${esc(title)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>`;
