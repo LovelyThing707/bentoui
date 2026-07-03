@@ -93,15 +93,12 @@ strong{font-weight:700}
 /* ---------- lead + recommendedFor ---------- */
 .lead h2{font-size:20px;font-weight:900;margin-bottom:12px}
 .lead p{color:var(--mid);font-size:15px;margin-bottom:12px}
-.reco-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;
-  padding:20px 22px;box-shadow:var(--sh-card);margin-top:18px}
-.reco-card h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.reco-card h3 .chip{width:28px;height:28px;border-radius:8px;background:rgba(8,145,178,.12);
-  color:var(--teal);display:grid;place-items:center;flex:none}
+.reco-card{background:var(--well);border-radius:16px;padding:20px 22px;margin-top:18px}
+.reco-card h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--ink)}
 .reco-list{display:grid;gap:10px}
-@media(min-width:720px){ .reco-list{grid-template-columns:repeat(3,1fr)} }
-.reco-list li{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--ink)}
-.reco-list li svg{width:18px;height:18px;color:var(--green);flex:none;margin-top:2px}
+@media(min-width:720px){ .reco-list{grid-template-columns:repeat(3,1fr);gap:10px 20px} }
+.reco-list li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.reco-list li svg{width:18px;height:18px;color:var(--teal);flex:none}
 
 /* ---------- 図解 tiles ---------- */
 .tiles{display:grid;gap:16px}

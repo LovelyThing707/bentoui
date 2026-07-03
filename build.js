@@ -213,7 +213,7 @@ function tplProduct(pageKey, page) {
   if (!items.length) items = (d.ranking || []);
   const tiles = (d.tiles || []).map((t, i) => `<div class="tile"><div class="chip">${I[TILE_ICONS[i % TILE_ICONS.length]]}</div><div class="tbody"><h3>${esc(cleanTileTitle(t.title))}</h3><p>${esc(cleanBody(t.body))}</p>${t.illustrationNote ? `<div class="illus">${esc(cleanIllus(t.illustrationNote))}</div>` : ""}</div></div>`).join("");
   const lead = (d.lead && d.lead.paragraphs || []).map((p) => `<p>${mdBold(p)}</p>`).join("");
-  const reco = (d.recommendedFor || []).length ? `<div class="reco-card"><h3><span class="chip">${I.check}</span>こんな方におすすめ</h3><ul class="reco-list">${d.recommendedFor.map((r) => `<li>${I.check}<span>${esc(r)}</span></li>`).join("")}</ul></div>` : "";
+  const reco = (d.recommendedFor || []).length ? `<div class="reco-card"><h3>こんな方におすすめ</h3><ul class="reco-list">${d.recommendedFor.map((r) => `<li>${I.check}<span>${esc(r)}</span></li>`).join("")}</ul></div>` : "";
   const cards = items.map((it, i) => rankingCard(it, i === 0)).join("");
   const closeLabel = (d.closing && d.closing.ctaLabel) || "おすすめランキングをもう一度見る";
   const closeParas = (d.closing && d.closing.paragraphs || []).map((p) => `<p>${mdBold(p)}</p>`).join("");
