@@ -45,8 +45,15 @@ const I = {
 const TILE_ICONS = ["coin", "bolt", "shield", "check"];
 
 /* ---------- partials ---------- */
-function head(page, title, desc) {
+const BASE = (site.site.baseUrl || "").replace(/\/$/, "");
+function pageUrl(page) { return page.file === "index.html" ? BASE + "/" : BASE + "/" + page.file; }
+function ogImage(page) { return BASE + "/" + (page.eyecatch || "assets/img/og-default.png"); }
+
+function head(page, title, desc, ld) {
   const gtm = site.site.gtmId;
+  const url = pageUrl(page);
+  const img = ogImage(page);
+  const ogType = page.template === "article" ? "article" : "website";
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -56,6 +63,20 @@ function head(page, title, desc) {
 <script>document.documentElement.classList.add('anim')</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
+<link rel="canonical" href="${esc(url)}">
+<meta name="theme-color" content="#0891B2">
+<meta property="og:type" content="${ogType}">
+<meta property="og:site_name" content="${esc(site.site.brand)}">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${esc(url)}">
+<meta property="og:image" content="${esc(img)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="${esc(img)}">
+${ld || ""}
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -142,6 +163,32 @@ function scripts(opts) {
 
 function foot(opts) { return footer() + scripts(opts) + "\n</body>\n</html>"; }
 
+/* ---------- JSON-LD structured data ---------- */
+function ldScript(obj) { return `<script type="application/ld+json">${JSON.stringify(obj)}</script>`; }
+function ldOrganization() {
+  return ldScript({ "@context": "https://schema.org", "@type": "Organization", name: site.site.brand, url: BASE + "/", logo: BASE + "/assets/img/og-default.png", email: site.site.contactEmail });
+}
+function ldWebsite() {
+  return ldScript({ "@context": "https://schema.org", "@type": "WebSite", name: site.site.brand, url: BASE + "/", inLanguage: "ja" });
+}
+function ldBreadcrumb(page, name) {
+  return ldScript({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "ホーム", item: BASE + "/" },
+    { "@type": "ListItem", position: 2, name: name, item: pageUrl(page) },
+  ] });
+}
+function ldItemList(items, page) {
+  return ldScript({ "@context": "https://schema.org", "@type": "ItemList", name: page.h1, numberOfItems: items.length,
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name })) });
+}
+function ldArticle(page, d) {
+  return ldScript({ "@context": "https://schema.org", "@type": "Article", headline: page.h1, inLanguage: "ja",
+    description: (d.lead && d.lead.paragraphs && d.lead.paragraphs[0]) || page.h1,
+    image: ogImage(page), mainEntityOfPage: pageUrl(page),
+    author: { "@type": "Organization", name: site.site.brand },
+    publisher: { "@type": "Organization", name: site.site.brand, logo: { "@type": "ImageObject", url: BASE + "/assets/img/og-default.png" } } });
+}
+
 /* ---------- shared components ---------- */
 function eyecatch(page, alt) {
   if (!page.eyecatch) return "";
@@ -220,7 +267,7 @@ function tplProduct(pageKey, page) {
   const closeParas = (d.closing && d.closing.paragraphs || []).map((p) => `<p>${mdBold(p)}</p>`).join("");
   const title = page.h1 + "【" + "" + "最新版】｜ネット回線比較.com";
 
-  return head(page, page.h1 + "｜ネット回線比較.com", (d.lead && d.lead.paragraphs && d.lead.paragraphs[0]) || page.h1) + header() +
+  return head(page, page.h1 + "｜ネット回線比較.com", (d.lead && d.lead.paragraphs && d.lead.paragraphs[0]) || page.h1, ldItemList(items, page) + ldBreadcrumb(page, page.h1)) + header() +
   `<main>
     <section class="mv"><div class="wrap">
       <p class="promo-line">${esc(site.site.promoLine)}</p>
@@ -286,7 +333,7 @@ function tplArticle(pageKey, page) {
     </div>` : "";
   const closeLabel = (d.closing && d.closing.ctaLabel) || "おすすめランキングをもう一度見る";
 
-  return head(page, page.h1 + "｜ネット回線比較.com", (d.lead && d.lead.paragraphs && d.lead.paragraphs[0]) || page.h1) + header() +
+  return head(page, page.h1 + "｜ネット回線比較.com", (d.lead && d.lead.paragraphs && d.lead.paragraphs[0]) || page.h1, ldArticle(page, d) + ldBreadcrumb(page, page.h1) + (items.length ? ldItemList(items, page) : "")) + header() +
   `<main><div class="wrap"><div class="article">
     <section class="mv art-mv">
       <p class="promo-line">${esc(site.site.promoLine)}</p>
@@ -396,7 +443,7 @@ function tplTop(page) {
   const pick = topKeys[0];
   const pickTags = (T.editorPick.tags || []).map((t) => `<span class="ptag ${esc(t.color)}">${esc(t.text)}</span>`).join("");
 
-  return head(page, "ネット回線比較.com｜実質月額で選ぶ、失敗しないネット回線ランキング", "光回線・ホームルーター・ポケット型WiFiを実質月額で徹底比較。3秒セルフ診断であなたに最適な回線が見つかります。") + header() +
+  return head(page, "ネット回線比較.com｜実質月額で選ぶ、失敗しないネット回線ランキング", "光回線・ホームルーター・ポケット型WiFiを実質月額で徹底比較。3秒セルフ診断であなたに最適な回線が見つかります。", ldOrganization() + ldWebsite()) + header() +
   `<main>
     <section class="hero"><div class="wrap">
       <p class="promo-line">${esc(site.site.promoLine)}</p>
@@ -491,6 +538,16 @@ function main() {
   // favicon
   fs.writeFileSync(path.join(DIST, "favicon.svg"),
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/><g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M16 30a22 22 0 0 1 32 0"/><path d="M23 37a12 12 0 0 1 18 0"/><circle cx="32" cy="45" r="2.5" fill="#fff" stroke="none"/></g></svg>`, "utf8");
+
+  // sitemap.xml + robots.txt
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = Object.values(site.pages).map((p) => {
+    const loc = p.file === "index.html" ? BASE + "/" : BASE + "/" + p.file;
+    const pr = p.file === "index.html" ? "1.0" : (p.template === "article" ? "0.7" : "0.8");
+    return `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>${pr}</priority></url>`;
+  }).join("\n");
+  fs.writeFileSync(path.join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, "utf8");
+  fs.writeFileSync(path.join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${BASE}/sitemap.xml\n`, "utf8");
 
   // assets + data
   copyDir(path.join(ROOT, "assets"), path.join(DIST, "assets"));
