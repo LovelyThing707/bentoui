@@ -542,3 +542,71 @@ strong{font-weight:700}
   .closing .cta-btn{width:100%}
   .closing h2{font-size:22px}
 }
+
+/* ============================================================
+   Animations — zero-dep · GPU-friendly (opacity/transform) · a11y-safe
+   ============================================================ */
+
+/* ---------- hover / press micro-interactions (user-initiated) ---------- */
+.cta-btn{transition:transform .14s ease, box-shadow .18s ease, background .18s ease}
+.cta-btn svg{transition:transform .18s ease}
+.cta-btn:hover svg{transform:translateX(3px)}
+.cta-btn:active{transform:translateY(0) scale(.985)}
+.rcard,.t5card{transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}
+.rcard:hover,.t5card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,18,31,.10)}
+.nav-card .go svg,.pick-link svg{transition:transform .18s ease}
+.nav-card:hover .go svg,.pick-link:hover svg{transform:translateX(3px)}
+.nav-card:active,.rcard:active,.t5card:active{transform:scale(.99)}
+.diag-dots i{transition:background .3s ease}
+.diag-opt{transition:border-color .15s ease, background .15s ease, transform .1s ease}
+.diag-opt:active{transform:scale(.99)}
+.sim-toggle button,.sd-toggle button{transition:background .22s ease, color .22s ease, border-color .22s ease}
+.site-header{transition:box-shadow .25s ease, background .25s ease}
+.site-header.scrolled{box-shadow:0 4px 20px rgba(13,18,31,.07)}
+.foot-nav a,.main-nav a{transition:color .15s ease}
+
+/* accordion smooth expand (progressive — unsupported browsers fall back to instant) */
+@supports (interpolate-size: allow-keywords){
+  html{interpolate-size:allow-keywords}
+  .rank-more::details-content{height:0;overflow:hidden;opacity:0;
+    transition:height .3s ease, opacity .3s ease, content-visibility .3s allow-discrete;content-visibility:hidden}
+  .rank-more[open]::details-content{height:auto;opacity:1;content-visibility:visible}
+}
+
+@media (prefers-reduced-motion: no-preference){
+  /* ---------- scroll-reveal entrances (hidden until .is-in; html.anim set in <head>) ---------- */
+  html.anim .sec-head, html.anim .diag-tile, html.anim .wtile, html.anim .nav-card,
+  html.anim .tile, html.anim .rcard, html.anim .t5card, html.anim .mv-eyecatch,
+  html.anim .reco-card, html.anim .closing, html.anim .art-sec, html.anim .toc,
+  html.anim .faq-card, html.anim .stepper, html.anim .matrix-wrap,
+  html.anim .hero .eyebrow-pill, html.anim .hero h1, html.anim .hero .sub, html.anim .lead p{
+    opacity:0; transform:translateY(20px);
+    transition:opacity .6s ease, transform .7s cubic-bezier(.22,.61,.36,1);
+  }
+  html.anim .is-in{opacity:1; transform:none}
+
+  /* ---------- flair ---------- */
+  /* eyecatch slow ken-burns on load */
+  .mv-eyecatch img{animation:kenburns 16s ease-out both}
+  @keyframes kenburns{from{transform:scale(1.06)}to{transform:scale(1)}}
+
+  /* #1 rank / featured badge soft glow */
+  .is-first .rank-badge, .rank-badge.grad, .pick-row .badge{animation:badgeglow 3s ease-in-out infinite}
+  @keyframes badgeglow{0%,100%{box-shadow:0 4px 12px rgba(37,99,235,.25)}50%{box-shadow:0 5px 18px rgba(34,211,238,.45)}}
+
+  /* amber CTA shine sweep — one-time on reveal (.shine) + on hover */
+  .cta-amber{position:relative;overflow:hidden}
+  .cta-amber::after{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg);opacity:0;pointer-events:none}
+  .cta-amber.shine::after{animation:shine 1s ease}
+  .cta-amber:hover::after{animation:shine .8s ease}
+  @keyframes shine{0%{left:-75%;opacity:0}12%{opacity:1}100%{left:130%;opacity:0}}
+
+  /* ---------- widget transitions ---------- */
+  .diag-panel.swap{animation:fadeup .35s ease}
+  .diag-result.show{animation:pop .4s cubic-bezier(.22,.61,.36,1)}
+  .sd-result.swap{animation:fadeup .3s ease}
+  @keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+}

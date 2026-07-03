@@ -53,6 +53,7 @@ function head(page, title, desc) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer-when-downgrade">
+<script>document.documentElement.classList.add('anim')</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <!-- Google Tag Manager -->
@@ -131,7 +132,7 @@ function dataBlobs(opts) {
 }
 
 function scripts(opts) {
-  const list = ["date.js", "cta-router.js"];
+  const list = ["anim.js", "date.js", "cta-router.js"];
   if (opts && opts.top) { list.push("diagnosis.js"); }
   list.push("main.js");
   return dataBlobs(opts) + list.map((f) => `<script src="assets/js/${f}"></script>`).join("");

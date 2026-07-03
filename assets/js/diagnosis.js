@@ -30,6 +30,7 @@
       '<div class="diag-q">' + esc(q.label) + "</div>" +
       '<div class="diag-opts">' + opts + "</div>" +
       '<div class="diag-hint">回答はいつでもやり直せます。結果は最短3秒で表示。</div>';
+    panel.classList.remove("swap"); void panel.offsetWidth; panel.classList.add("swap");
     panel.querySelectorAll(".diag-opt").forEach(function (b) {
       b.addEventListener("click", function () { choose(q, +b.getAttribute("data-i")); });
     });

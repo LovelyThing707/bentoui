@@ -5,6 +5,24 @@
 (function () {
   var names = window.__PRODUCT_NAMES__ || {};
   var yen = function (n) { return "¥" + Number(n).toLocaleString("ja-JP"); };
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // animated count-up for a yen figure
+  function animateYen(el, to) {
+    var from = parseInt((el.textContent || "").replace(/[^0-9]/g, ""), 10) || 0;
+    if (reduce || from === to) { el.textContent = yen(to); return; }
+    var start = null, dur = 480;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      el.textContent = yen(Math.round(from + (to - from) * eased));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  // re-trigger a CSS animation class on an element
+  function replay(el, cls) { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
 
   /* ---------- simulator ---------- */
   (function () {
@@ -24,7 +42,7 @@
         var k = r.getAttribute("data-sim-product");
         var v = sim.products[k] && sim.products[k][month];
         var pr = r.querySelector(".price");
-        if (pr && v != null) pr.textContent = yen(v);
+        if (pr && v != null) animateYen(pr, v);
         var sub = r.querySelector("[data-sim-sub]");
         if (sub) sub.textContent = "実質月額 / " + month + "ヶ月";
         r.classList.toggle("best", v != null && v === min);
@@ -60,6 +78,7 @@
         '<div class="hit"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>' +
         '<div><div class="hd">' + esc(r.headline) + "</div><div class=\"am\">" + amount + "</div></div></div>" +
         '<div class="sd-elig"><span class="lbl">' + esc(eligLabel) + '</span><span class="sd-pills">' + pills + "</span></div>";
+      replay(out, "swap");
     }
     btns.forEach(function (b) {
       b.addEventListener("click", function () {
