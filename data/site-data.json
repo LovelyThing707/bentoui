@@ -33,8 +33,8 @@
       { "label": "コンサルタントに相談", "href": "mailto:contact@ad-kikoushi.jp" }
     ],
     "_footerNav_note": "お役立ちコラム & 会社概要 URLs from 00_TOPページ.json (rows: internet-hikaku.com/lp/ranking/column|company). コンサルタントに相談 = mailto per 00_TOPページ.json note 'メールが立ち上がり下記のアドレスに送信できるようにする contact@ad-kikoushi.jp'. Confirm with client.",
-    "footerDisclaimer": "当サイトでは掲載会社様と提携をしてサービスの掲載をさせていただいております。当サイトで販売している訳ではございません。商品に関するお問い合わせは各リンク先の企業様へお願いいたします。当サイトで紹介している情報は十分な注意を払って提供しておりますが、情報の正確性その他一切の事項について保証をするものではありません。お客様のご判断とご責任でご利用下さい。本ページのいかなる情報により生じた損失に対しても当社は責任を負いません。",
-    "_footerDisclaimer_TODO": "Verify exact wording vs. approved Figma footer."
+    "footerDisclaimer": "当サイトでは掲載会社様と提携をしてサービスの掲載をさせていただいております。当サイトで販売している訳ではございません。商品に関するお問い合わせは各リンク先の企業様へお願いいたします。当サイトで紹介している情報は十分な注意を払って提供しておりますが、情報の正確性その他一切の事項についてを保証をするものではありません。お客様のご判断とご責任でご利用下さい。本ページのいかなる情報により生じた損失に対しても当社は責任を負いません。",
+    "_footerDisclaimer_note": "Matched verbatim to approved Figma footer node 64:551 (2026-07-02). NOTE: 'その他一切の事項についてを保証をする' contains a probable typo in the approved design (double を particle); kept as-is to match Figma exactly — confirm with client whether to correct to 'について保証する'."
   },
   "ctaRouting": {
     "detect": [
