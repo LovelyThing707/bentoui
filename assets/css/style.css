@@ -574,16 +574,19 @@ strong{font-weight:700}
 }
 
 @media (prefers-reduced-motion: no-preference){
-  /* ---------- scroll-reveal entrances (hidden until .is-in; html.anim set in <head>) ---------- */
+  /* ---------- scroll-reveal entrances (hidden until .is-in; html.anim set in <head>) ----------
+     Opacity-only fade: avoids (a) the specificity battle where multi-part hide selectors
+     (.hero h1, .lead p) out-specify a bare .is-in, and (b) any transform conflict with the
+     card hover-lift. Multi-part selectors also get an explicit .is-in reveal rule below. */
   html.anim .sec-head, html.anim .diag-tile, html.anim .wtile, html.anim .nav-card,
   html.anim .tile, html.anim .rcard, html.anim .t5card, html.anim .mv-eyecatch,
   html.anim .reco-card, html.anim .closing, html.anim .art-sec, html.anim .toc,
   html.anim .faq-card, html.anim .stepper, html.anim .matrix-wrap,
   html.anim .hero .eyebrow-pill, html.anim .hero h1, html.anim .hero .sub, html.anim .lead p{
-    opacity:0; transform:translateY(20px);
-    transition:opacity .6s ease, transform .7s cubic-bezier(.22,.61,.36,1);
+    opacity:0; transition:opacity .55s ease;
   }
-  html.anim .is-in{opacity:1; transform:none}
+  html.anim .is-in{opacity:1}
+  html.anim .hero .eyebrow-pill.is-in, html.anim .hero h1.is-in, html.anim .hero .sub.is-in, html.anim .lead p.is-in{opacity:1}
 
   /* ---------- flair ---------- */
   /* eyecatch slow ken-burns on load */
