@@ -512,6 +512,8 @@ strong{font-weight:700}
 .brand-logo{height:26px;width:auto;max-width:148px;object-fit:contain;vertical-align:middle}
 /* diagnosis result sits on the cyan→blue gradient badge — enlarge + ring the chip for separation */
 .diag-result .wm-chip{min-width:28px;height:28px;font-size:14px;box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+/* a real (transparent, dark-ink) logo needs a white plate to read on the gradient badge */
+.diag-result .logo-badge .brand-logo{height:30px;max-width:82%;background:#fff;padding:9px 16px;border-radius:10px;box-shadow:0 2px 8px rgba(11,18,31,.18)}
 .rc-specs{display:grid;grid-template-columns:1fr 1fr;background:var(--well);border-radius:12px;padding:4px}
 .rc-specs .spec-cell{background:transparent;padding:9px 12px;text-align:left}
 .rc-specs .spec-cell .lbl{font-size:10px;color:var(--lo);margin-bottom:2px}

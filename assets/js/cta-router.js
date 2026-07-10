@@ -1,14 +1,17 @@
 /* cta-router.js — source-routed affiliate CTAs (CLAUDE.md §8)
-   1. Detects inbound ad source (gclid→google, yclid→yahoo, msclkid→bing,
-      else utm_source, else その他) and rewrites every [data-cta] href to the
-      matching variant. Products map is injected per-page as window.__CTA__:
-        { "<product-key>": { google, yahoo, bing, "その他" } }
-   2. Click-id passthrough: forwards the inbound gclid/yclid/msclkid VALUE into
-      the outbound affiliate URL's matching (empty) param, so the ad network can
-      attribute the conversion. Only fills params that already exist on the URL,
-      so non-magic-ad links (a8/rentracks/affitown/accesstrade) are untouched.
+   Detects inbound ad source (gclid→google, yclid→yahoo, msclkid→bing, else
+   utm_source, else その他) and rewrites every [data-cta] href to the matching
+   variant. Products map is injected per-page as window.__CTA__:
+     { "<product-key>": { google, yahoo, bing, "その他" } }
    The 5 "指定なし" products have the same URL in all 4 variants, so the routing
-   logic is uniform for every product. */
+   logic is uniform for every product.
+
+   NOTE (client decision 2026-07-11 — supersedes §8's click-id passthrough):
+   we do NOT write the gclid/yclid/msclkid VALUE into the outbound URL; those
+   params stay empty as provided. The click-id reaches the ASP via the Referer
+   header instead (meta referrer = no-referrer-when-downgrade), so also passing
+   it in the URL would risk double-counting. Source detection is kept only to
+   choose the correct per-source variant (each magic-ad variant has its own bId). */
 (function () {
   var CTA = window.__CTA__ || {};
   var utmMap = (window.__CTA_CONFIG__ && window.__CTA_CONFIG__.utmSourceMap) || {
@@ -17,7 +20,6 @@
   var DEFAULT = (window.__CTA_CONFIG__ && window.__CTA_CONFIG__.default) || "その他";
 
   var qp = new URLSearchParams(location.search);
-  var inbound = { gclid: qp.get("gclid"), yclid: qp.get("yclid"), msclkid: qp.get("msclkid") };
 
   function detectSource() {
     if (qp.has("gclid")) return "google";
@@ -30,21 +32,11 @@
 
   var src = detectSource();
 
-  function withClickIds(rawUrl) {
-    try {
-      var u = new URL(rawUrl, location.href);
-      ["gclid", "yclid", "msclkid"].forEach(function (k) {
-        if (inbound[k] && u.searchParams.has(k)) u.searchParams.set(k, inbound[k]);
-      });
-      return u.toString();
-    } catch (e) { return rawUrl; }
-  }
-
+  // Referer-only: return the source-matched variant as-is (empty gclid/yclid/msclkid slots kept)
   function urlFor(key) {
     var v = CTA[key];
     if (!v) return null;
-    var raw = v[src] || v[DEFAULT] || v["その他"] || v.google || null;
-    return raw ? withClickIds(raw) : null;
+    return v[src] || v[DEFAULT] || v["その他"] || v.google || null;
   }
 
   // expose for diagnosis.js

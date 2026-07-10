@@ -75,7 +75,8 @@ let src = p.has('gclid')?'google':p.has('yclid')?'yahoo':p.has('msclkid')?'bing'
         : (utmMap[p.get('utm_source')] || 'その他');
 document.querySelectorAll('[data-cta]').forEach(a=>{ a.href = product.cta[src]; });
 ```
-**⚠ BLOCKER:** the actual affiliate URLs (4 per product) are NOT in our materials. Confirm the source (client-provided list, or in the Excel / 設置タグ file) before this can function. Build can scaffold with empty `cta` values; site is non-functional until filled.
+**⚠ BLOCKER (RESOLVED):** the actual affiliate URLs are in the Excel リンク先一覧 sheet (11 products; 6 magic-ad source-routed w/ empty `gclid=&yclid=&msclkid=` slots, 5 単一URL a8/rentracks/etc.).
+**Click-id passthrough — REMOVED (client decision 2026-07-11):** do NOT write the gclid/yclid/msclkid VALUE into the outbound URL. The client goes **Referer-only** (meta referrer `no-referrer-when-downgrade` carries the landing URL, incl. click-id, to the ASP) to avoid double-counting; the URL param slots stay empty. `cta-router.js` keeps only source→variant selection (each magic-ad variant has its own `bId`).
 
 ## 9. Diagnosis (セルフ診断) → diagnosis.js
 Quiz; only **Q1 (利用場所)** branches the result:

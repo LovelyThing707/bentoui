@@ -4,7 +4,10 @@ dist/
 
 # large source archives / duplicates (kept locally, not in repo)
 *.rar
+*.zip
 アイキャッチ画像 11点/
+案件ロゴ素材_11社/
+リード文_こんな方におすすめ_差し替え版.txt
 
 # logs / OS cruft
 *.log

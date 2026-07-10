@@ -305,17 +305,17 @@
   },
   "brands": {
     "_note": "① interim brand wordmarks for ranking / TOP5 / 診断結果 (official ロゴ画像 pending ASP ac.magic-ad.jp authorized 素材). build.js brandMark(): renders a color+mono monogram chip + name now; set 'logo' to an asset path (e.g. assets/img/logos/<key>.svg) when authorized logos arrive and it swaps the chip for <img> — no layout change. Colors are distinct interim hues (loose brand nods), NOT official brand color values.",
-    "mobareco-air":    { "color": "#F59E0B", "mono": "モ",  "logo": null },
-    "broad-wimax":     { "color": "#2563EB", "mono": "B",   "logo": null },
-    "jcom":            { "color": "#E4007F", "mono": "J",   "logo": null },
-    "softbank-hikari": { "color": "#64748B", "mono": "SB",  "logo": null },
-    "docomo-hikari":   { "color": "#CC0000", "mono": "d",   "logo": null },
-    "nuro-hikari":     { "color": "#7C3AED", "mono": "N",   "logo": null },
-    "au-hikari":       { "color": "#EA5504", "mono": "au",  "logo": null },
-    "uq-wimax":        { "color": "#0891B2", "mono": "UQ",  "logo": null },
-    "kashimo-wimax":   { "color": "#059669", "mono": "カ",  "logo": null },
-    "5g-connect":      { "color": "#DB2777", "mono": "5G",  "logo": null },
-    "biglobe-wimax":   { "color": "#1D4ED8", "mono": "BG",  "logo": null }
+    "mobareco-air":    { "color": "#F59E0B", "mono": "モ",  "logo": "assets/img/logos/mobareco-air.png" },
+    "broad-wimax":     { "color": "#2563EB", "mono": "B",   "logo": "assets/img/logos/broad-wimax.png" },
+    "jcom":            { "color": "#E4007F", "mono": "J",   "logo": "assets/img/logos/jcom.png" },
+    "softbank-hikari": { "color": "#64748B", "mono": "SB",  "logo": "assets/img/logos/softbank-hikari.png" },
+    "docomo-hikari":   { "color": "#CC0000", "mono": "d",   "logo": "assets/img/logos/docomo-hikari.png" },
+    "nuro-hikari":     { "color": "#7C3AED", "mono": "N",   "logo": "assets/img/logos/nuro-hikari.png" },
+    "au-hikari":       { "color": "#EA5504", "mono": "au",  "logo": "assets/img/logos/au-hikari.png" },
+    "uq-wimax":        { "color": "#0891B2", "mono": "UQ",  "logo": "assets/img/logos/uq-wimax.png" },
+    "kashimo-wimax":   { "color": "#059669", "mono": "カ",  "logo": "assets/img/logos/kashimo-wimax.png" },
+    "5g-connect":      { "color": "#DB2777", "mono": "5G",  "logo": "assets/img/logos/5g-connect.png" },
+    "biglobe-wimax":   { "color": "#1D4ED8", "mono": "BG",  "logo": "assets/img/logos/biglobe-wimax.png" }
   },
   "pages": {
     "top":           { "file": "index.html",          "template": "top",     "h1": "",                                              "eyecatch": null,                                    "ranking": "top" },
