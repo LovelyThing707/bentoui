@@ -40,7 +40,7 @@
     var opt = q.options[i];
     if (opt.action === "scrollToComparison") {
       var el = document.getElementById("comparison-matrix");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      if (el) { if (window.__expand) window.__expand(el); el.scrollIntoView({ behavior: "smooth" }); }
       return;
     }
     if (q.branches) resultKey = opt.result || (data.results && data.results[opt.value]) || resultKey;

@@ -69,8 +69,8 @@
       "docomo":   { "headline": "docomo をお使いなら",         "amount": "ドコモ光セット割で毎月最大 {hl} のセット割対象です。",       "highlight": "¥1,100 OFF", "eligible": ["ドコモ光"] },
       "au":       { "headline": "au・UQ mobile をお使いなら",   "amount": "auスマートバリュー等で毎月最大 {hl} のセット割対象です。",     "highlight": "¥1,100 OFF", "eligible": ["BroadWiMAX", "J:COM"] },
       "SoftBank": { "headline": "SoftBank・Y!mobile をお使いなら", "amount": "おうち割で毎月最大 {hl} のセット割対象です。",             "highlight": "¥1,100 OFF", "eligible": ["モバレコAir", "ソフトバンク光"] },
-      "Rakuten":  { "headline": "楽天モバイル をお使いなら",     "amount": "対象回線でセット割・キャンペーンが利用できます。",           "highlight": null,          "eligible": ["モバレコAir", "BroadWiMAX"] },
-      "格安SIM":  { "headline": "格安SIM をお使いなら",         "amount": "対象回線でお得なキャンペーンが利用できます。",               "highlight": null,          "eligible": ["モバレコAir", "BroadWiMAX"] }
+      "Rakuten":  { "headline": "楽天モバイル をお使いなら",     "amount": "楽天モバイルに固定のセット割はありませんが、対象回線の {hl} でお得に使えます。", "highlight": "当サイト限定キャッシュバック", "eligible": ["モバレコAir", "BroadWiMAX"] },
+      "格安SIM":  { "headline": "格安SIM をお使いなら",         "amount": "格安SIMに固定のセット割はありませんが、対象回線の {hl} でお得に使えます。",     "highlight": "当サイト限定キャッシュバック", "eligible": ["モバレコAir", "BroadWiMAX"] }
     }
   },
   "quickAccess": {

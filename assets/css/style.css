@@ -75,7 +75,10 @@ strong{font-weight:700}
 .main-nav .nav-btn{border:1px solid var(--bd2);border-radius:999px;padding:8px 15px;
   font-size:13px;color:var(--ink);font-weight:700}
 .nav-toggle{display:inline-flex;flex-direction:column;gap:4px;background:none;border:0;cursor:pointer;padding:8px}
-.nav-toggle span{width:22px;height:2px;background:var(--ink);border-radius:2px}
+.nav-toggle span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease,opacity .18s ease}
+.nav-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 @media(min-width:880px){ .main-nav{display:flex} .nav-toggle{display:none} }
 
 /* ---------- MV / eyecatch ---------- */
@@ -325,7 +328,12 @@ strong{font-weight:700}
 .matrix tbody tr:last-child td{border-bottom:0}
 .matrix tr.hl{background:rgba(34,211,238,.05)}
 .matrix .mini-cta{font-size:12px;padding:8px 14px;border-radius:9px}
-.matrix .discount-hit{outline:2px solid var(--green);outline-offset:-2px}
+.matrix .discount-hit,.t5card.discount-hit{outline:2px solid var(--green);outline-offset:-2px}
+.matrix tr.discount-hit{background:rgba(5,150,105,.06)}
+.sd-flag{display:inline-flex;align-items:center;gap:3px;margin-left:8px;vertical-align:middle;
+  background:rgba(5,150,105,.12);color:var(--green);font-size:10.5px;font-weight:700;
+  border-radius:999px;padding:2px 8px 2px 6px;white-space:nowrap;line-height:1.5}
+.sd-flag svg{width:11px;height:11px;flex:none}
 
 /* スマホ割 checker */
 .sd-toggle{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
@@ -580,7 +588,7 @@ strong{font-weight:700}
   html.anim .reco-card, html.anim .closing, html.anim .art-sec, html.anim .toc,
   html.anim .faq-card, html.anim .stepper, html.anim .matrix-wrap,
   html.anim .hero .eyebrow-pill, html.anim .hero h1, html.anim .hero .sub, html.anim .lead p{
-    opacity:0; transition:opacity .55s ease;
+    opacity:0; transition:opacity .32s ease;
   }
   html.anim .is-in{opacity:1}
   html.anim .hero .eyebrow-pill.is-in, html.anim .hero h1.is-in, html.anim .hero .sub.is-in, html.anim .lead p.is-in{opacity:1}

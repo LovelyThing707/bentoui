@@ -10,6 +10,8 @@
   var SEL = ".sec-head,.diag-tile,.wtile,.nav-card,.tile,.rcard,.t5card,.mv-eyecatch," +
     ".reco-card,.closing,.art-sec,.toc,.faq-card,.stepper,.matrix-wrap," +
     ".hero .eyebrow-pill,.hero h1,.hero .sub,.lead p";
+  // exposed so the さらに見る collapse can force-reveal freshly shown children (main.js)
+  window.__REVEAL_SEL__ = SEL;
 
   function run() {
     var els = [].slice.call(document.querySelectorAll(SEL));
@@ -24,7 +26,7 @@
       var p = el.parentElement;
       if (p && /nav-grid|ranking-list|top5-cards|tiles|faq|reco-list/.test(p.className)) {
         var sibs = [].slice.call(p.children);
-        el.style.transitionDelay = Math.min(sibs.indexOf(el), 6) * 70 + "ms";
+        el.style.transitionDelay = Math.min(sibs.indexOf(el), 6) * 30 + "ms";
       }
     });
 
@@ -32,7 +34,7 @@
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
+    }, { rootMargin: "0px 0px 12% 0px", threshold: 0.01 });
     els.forEach(function (el) { io.observe(el); });
 
     // one-time shine on amber CTAs as they scroll into view

@@ -70,8 +70,27 @@
     var out = wrap.querySelector(".sd-result");
     var eligLabel = sd.eligibleLabel || "セット割対象：";
     function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    // highlight the matching rows in the TOP5 比較表 + tag them with a セット割対象 flag
+    function highlightMatrix(carrier) {
+      var keys = (sd.carrierKeys && sd.carrierKeys[carrier]) || [];
+      [].slice.call(document.querySelectorAll("[data-mx]")).forEach(function (row) {
+        var hit = keys.indexOf(row.getAttribute("data-mx")) >= 0;
+        row.classList.toggle("discount-hit", hit);
+        var nameEl = row.querySelector(".mn");
+        var flag = row.querySelector(".sd-flag");
+        if (hit && nameEl && !flag) {
+          flag = document.createElement("span");
+          flag.className = "sd-flag";
+          flag.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>セット割対象';
+          nameEl.appendChild(flag);
+        } else if (!hit && flag) {
+          flag.parentNode.removeChild(flag);
+        }
+      });
+    }
     function update(carrier) {
       var r = sd.results[carrier];
+      highlightMatrix(carrier);
       if (!r) { out.innerHTML = ""; return; }
       var amount = (r.amount || "").replace("{hl}", r.highlight ? '<span class="hl">' + esc(r.highlight) + "</span>" : "");
       var pills = (r.eligible || []).map(function (n) { return '<span class="sd-pill">' + esc(n) + "</span>"; }).join("");
@@ -94,26 +113,56 @@
   })();
 
   /* ---------- collapse (さらに見る) ---------- */
+  function setCollapse(box, collapsed) {
+    box.classList.toggle("collapsed", collapsed);
+    var btn = document.querySelector('.collapse-toggle[data-target="' + box.id + '"]');
+    if (btn) btn.textContent = collapsed ? btn.getAttribute("data-more") : btn.getAttribute("data-less");
+    // when opening, force-reveal children that the scroll-reveal left hidden while display:none
+    if (!collapsed && window.__REVEAL_SEL__) {
+      [].slice.call(box.querySelectorAll(window.__REVEAL_SEL__)).forEach(function (el) { el.classList.add("is-in"); });
+    }
+  }
   document.querySelectorAll(".collapse-toggle").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var box = document.getElementById(btn.getAttribute("data-target"));
-      if (!box) return;
-      var collapsed = box.classList.toggle("collapsed");
-      btn.textContent = collapsed ? btn.getAttribute("data-more") : btn.getAttribute("data-less");
+      if (box) setCollapse(box, !box.classList.contains("collapsed"));
     });
   });
+  // open a collapsed section before scrolling to something inside it (diagnosis.js / hash nav use this)
+  window.__expand = function (el) {
+    var box = el && el.closest && el.closest(".collapsible.collapsed");
+    if (box) setCollapse(box, false);
+  };
 
   /* ---------- mobile menu ---------- */
   var tgl = document.querySelector(".nav-toggle");
   var menu = document.querySelector(".mobile-menu");
-  if (tgl && menu) tgl.addEventListener("click", function () { menu.classList.toggle("open"); });
+  if (tgl && menu) tgl.addEventListener("click", function () {
+    var open = menu.classList.toggle("open");
+    tgl.classList.toggle("open", open);
+    tgl.setAttribute("aria-expanded", open ? "true" : "false");
+  });
 
   /* ---------- smooth in-page scroll for data-scroll ---------- */
   document.querySelectorAll("[data-scroll]").forEach(function (a) {
     a.addEventListener("click", function (e) {
       var sel = a.getAttribute("data-scroll");
       var el = sel && document.querySelector(sel);
-      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: "smooth" }); }
+      if (el) { e.preventDefault(); if (window.__expand) window.__expand(el); el.scrollIntoView({ behavior: "smooth" }); }
     });
   });
+
+  /* ---------- hash navigation: open a collapsed section the anchor lives in ---------- */
+  function revealHash() {
+    if (!location.hash || location.hash.length < 2) return;
+    var el;
+    try { el = document.querySelector(location.hash); } catch (e) { return; }
+    if (!el) return;
+    var box = el.closest && el.closest(".collapsible.collapsed");
+    if (!box) return; // visible anchor: let the browser handle it natively
+    if (window.__expand) window.__expand(el);
+    setTimeout(function () { el.scrollIntoView({ behavior: "smooth" }); }, 0);
+  }
+  window.addEventListener("hashchange", revealHash);
+  revealHash();
 })();

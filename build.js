@@ -107,9 +107,9 @@ function header() {
     <a href="index.html#comparison-matrix">料金比較</a>
     <a class="nav-btn" href="guide.html">初心者ガイド</a>
   </nav>
-  <button class="nav-toggle" aria-label="メニュー"><span></span><span></span><span></span></button>
+  <button class="nav-toggle" aria-label="メニュー" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
 </div>
-<div class="mobile-menu">
+<div class="mobile-menu" id="mobile-menu">
   <a href="index.html#ranking">ランキング</a>
   <a href="index.html#diagnosis">無料診断</a>
   <a href="index.html#comparison-matrix">料金比較</a>
@@ -149,7 +149,9 @@ function dataBlobs(opts) {
     const T = load("top") || {};
     js += `window.__DIAGNOSIS__=${JSON.stringify({ questions: site.diagnosis.questions, results: site.diagnosis.results })};`;
     js += `window.__SIM__=${JSON.stringify(site.simulator)};`;
-    js += `window.__SD__=${JSON.stringify((T.sumahoWari && { results: T.sumahoWari.results, eligibleLabel: T.sumahoWari.eligibleLabel }) || {})};`;
+    const sdKeys = {};
+    for (const c in site.smartphoneDiscount) { if (c === "_note") continue; sdKeys[c] = site.smartphoneDiscount[c]; }
+    js += `window.__SD__=${JSON.stringify((T.sumahoWari && { results: T.sumahoWari.results, eligibleLabel: T.sumahoWari.eligibleLabel, carrierKeys: sdKeys }) || {})};`;
   }
   return `<script>${js}</script>`;
 }
@@ -406,7 +408,7 @@ function tplTop(page) {
     const m = mx[k] || {};
     const pos = m.positive ? "pos" : "";
     const first = i === 0;
-    return `<tr class="${first ? "hl" : ""}">
+    return `<tr class="${first ? "hl" : ""}" data-mx="${k}">
       <td class="rankcell"><span class="rank-badge sm ${first ? "grad" : ""}">${i + 1}</span></td>
       <td class="nm"><div class="mn">${esc(p[k].name)}</div><div class="sub">${esc(m.type || p[k].type)}</div></td>
       <td class="price num">¥${Number(p[k].jisshitsu).toLocaleString()}<div class="sub">${esc(T.topMatrix.priceSub || "")}</div></td>
@@ -422,7 +424,7 @@ function tplTop(page) {
     const m = mx[k] || {};
     const first = i === 0;
     const pos = m.positive ? "pos" : "";
-    return `<article class="t5card ${first ? "is-first" : ""}">
+    return `<article class="t5card ${first ? "is-first" : ""}" data-mx="${k}">
       <div class="t5head"><span class="rank-badge ${first ? "grad" : ""}">${i + 1}</span>
         <div class="t5name"><div class="mn">${esc(p[k].name)}${first ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(m.type || p[k].type)}</div></div>
       </div>
@@ -484,8 +486,10 @@ function tplTop(page) {
     <section class="section" id="ranking"><div class="wrap">
       ${secHead("USE CASE", T.sceneNav.title, T.sceneNav.sub)}
       <div class="nav-grid scene">${scenes}</div>
+      <button class="collapse-toggle" data-target="more-top" data-more="回線タイプ・料金比較・スマホ割をもっと見る ▼" data-less="閉じる ▲" aria-controls="more-top">回線タイプ・料金比較・スマホ割をもっと見る ▼</button>
     </div></section>
 
+    <div class="collapsible collapsed" id="more-top"><div class="collapse-body">
     <section class="section"><div class="wrap">
       ${secHead("LINE TYPE", T.lineType.title, T.lineType.sub, "blue")}
       <div class="nav-grid type">${types}</div>
@@ -507,6 +511,7 @@ function tplTop(page) {
     <section class="section"><div class="wrap">
       <div class="nav-grid quick">${quick}</div>
     </div></section>
+    </div></div>
   </main>` + foot({ top: true, page: "top" });
 }
 
