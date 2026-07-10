@@ -152,6 +152,9 @@ function dataBlobs(opts) {
     const sdKeys = {};
     for (const c in site.smartphoneDiscount) { if (c === "_note") continue; sdKeys[c] = site.smartphoneDiscount[c]; }
     js += `window.__SD__=${JSON.stringify((T.sumahoWari && { results: T.sumahoWari.results, eligibleLabel: T.sumahoWari.eligibleLabel, carrierKeys: sdKeys }) || {})};`;
+    const brandsJs = {};
+    for (const bk in (site.brands || {})) { if (bk === "_note") continue; const bb = site.brands[bk]; brandsJs[bk] = { color: bb.color, mono: bb.mono, logo: bb.logo, fg: chipFg(bb.color || "#5A6473") }; }
+    js += `window.__BRAND__=${JSON.stringify(brandsJs)};`;
   }
   return `<script>${js}</script>`;
 }
@@ -207,6 +210,24 @@ function ctaBtn(key, label, primary) {
   const url = (site.products[key] && site.products[key].cta[site.ctaRouting.default]) || "#";
   return `<a class="cta-btn ${primary ? "cta-amber" : "cta-teal"}" data-cta data-product="${esc(key)}" href="${esc(url)}" rel="nofollow sponsored noopener" target="_blank">${esc(label)}${primary ? I.arrow : ""}</a>`;
 }
+// ① brand identity: real logo <img> once assets land (brands.<key>.logo), else an
+// interim color+monogram wordmark. Drop-in — swapping to <img> needs no markup change.
+// chipFg: readable monogram color (dark on light chips like amber, white on dark ones).
+function chipFg(hex) {
+  const h = String(hex).replace("#", "");
+  if (h.length < 6) return "#fff";
+  const lin = (c) => { c = parseInt(c, 16) / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  const L = 0.2126 * lin(h.slice(0, 2)) + 0.7152 * lin(h.slice(2, 4)) + 0.0722 * lin(h.slice(4, 6));
+  return L > 0.2 ? "#1A1206" : "#fff";
+}
+function brandMark(key) {
+  const b = (site.brands && site.brands[key]) || {};
+  const name = (site.products[key] && site.products[key].name) || key;
+  if (b.logo) return `<img class="brand-logo" src="${esc(b.logo)}" alt="${esc(name)}" loading="lazy" decoding="async">`;
+  const mono = b.mono || name.slice(0, 1);
+  const c = b.color || "#5A6473";
+  return `<span class="wordmark"><span class="wm-chip" style="--bc:${esc(c)};--bfg:${chipFg(c)}">${esc(mono)}</span><span class="wm-name">${esc(name)}</span></span>`;
+}
 
 function rankingCard(item, isFirst) {
   const s = item.specs || {};
@@ -236,7 +257,7 @@ function rankingCard(item, isFirst) {
     <div class="rc-row">
       <div class="rc-head">
         <span class="rank-badge ${isFirst ? "grad" : ""}">${esc(item.rank)}</span>
-        <div class="rc-name"><div class="mn">${esc(item.name)}${isFirst ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(item.lineType || "")}</div></div>
+        <div class="rc-name"><div class="mn">${brandMark(key)}${isFirst ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(item.lineType || "")}</div></div>
       </div>
       <div class="rc-specs">${cells}</div>
       <div class="rc-cta">${ctaBtn(key, isFirst ? "公式サイトへ" : "公式サイト", isFirst)}</div>
@@ -410,7 +431,7 @@ function tplTop(page) {
     const first = i === 0;
     return `<tr class="${first ? "hl" : ""}" data-mx="${k}">
       <td class="rankcell"><span class="rank-badge sm ${first ? "grad" : ""}">${i + 1}</span></td>
-      <td class="nm"><div class="mn">${esc(p[k].name)}</div><div class="sub">${esc(m.type || p[k].type)}</div></td>
+      <td class="nm"><div class="mn">${brandMark(k)}</div><div class="sub">${esc(m.type || p[k].type)}</div></td>
       <td class="price num">¥${Number(p[k].jisshitsu).toLocaleString()}<div class="sub">${esc(T.topMatrix.priceSub || "")}</div></td>
       <td class="rating num"><span class="star">★</span> ${esc(m.rating || "-")}</td>
       <td class="${pos}">${esc(m.opening || "-")}</td>
@@ -426,7 +447,7 @@ function tplTop(page) {
     const pos = m.positive ? "pos" : "";
     return `<article class="t5card ${first ? "is-first" : ""}" data-mx="${k}">
       <div class="t5head"><span class="rank-badge ${first ? "grad" : ""}">${i + 1}</span>
-        <div class="t5name"><div class="mn">${esc(p[k].name)}${first ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(m.type || p[k].type)}</div></div>
+        <div class="t5name"><div class="mn">${brandMark(k)}${first ? `<span class="badge-1i">総合1位</span>` : ""}</div><div class="sub">${esc(m.type || p[k].type)}</div></div>
       </div>
       <div class="t5specs">
         <div class="t5cell"><div class="l">実質月額</div><div class="v price num">¥${Number(p[k].jisshitsu).toLocaleString()}</div></div>
@@ -473,7 +494,7 @@ function tplTop(page) {
             <div class="thead"><div class="t"><span class="chip chip-amber">★</span><div><span class="eyebrow">EDITOR'S PICK</span><h2>${esc(T.editorPick.title)}</h2></div></div><a class="pick-link" href="#comparison-matrix" data-scroll="#comparison-matrix">${esc(T.editorPick.link)} ${I.arrow}</a></div>
             <div class="pick-row">
               <span class="badge num">1</span>
-              <div><div class="pnm">${esc(p[pick].name)}</div><div class="type" style="font-size:12.5px;color:var(--lo)">${esc(p[pick].type)}</div></div>
+              <div><div class="pnm">${brandMark(pick)}</div><div class="type" style="font-size:12.5px;color:var(--lo)">${esc(p[pick].type)}</div></div>
               ${ctaBtn(pick, T.editorPick.cta, true)}
               <div class="pick-tags">${pickTags}</div>
             </div>

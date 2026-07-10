@@ -16,6 +16,14 @@
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
 
+  // ① brand mark for the result (mirrors build.js brandMark): real logo once assets land, else monogram wordmark
+  function brandMark(key, nm) {
+    var b = (window.__BRAND__ && window.__BRAND__[key]) || {};
+    if (b.logo) return '<img class="brand-logo" src="' + esc(b.logo) + '" alt="' + esc(nm) + '">';
+    var mono = b.mono || String(nm).slice(0, 1);
+    return '<span class="wordmark"><span class="wm-chip" style="--bc:' + esc(b.color || "#5A6473") + ';--bfg:' + esc(b.fg || "#fff") + '">' + esc(mono) + '</span><span class="wm-name">' + esc(nm) + '</span></span>';
+  }
+
   function chevron(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>'; }
 
   function renderQuestion() {
@@ -54,7 +62,7 @@
     var href = (window.ctaUrlFor && window.ctaUrlFor(resultKey)) || "#";
     panel.innerHTML =
       '<div class="diag-result show">' +
-        '<div class="logo-badge"><div class="k">あなたにおすすめの回線</div><div class="n">' + esc(nm) + "</div></div>" +
+        '<div class="logo-badge"><div class="k">あなたにおすすめの回線</div><div class="n">' + brandMark(resultKey, nm) + "</div></div>" +
         '<a class="cta-btn cta-amber cta-block" data-cta data-product="' + esc(resultKey) + '" href="' + esc(href) + '" rel="nofollow sponsored noopener" target="_blank">公式サイトで詳細を見る</a>' +
         '<button class="diag-restart" type="button">もう一度診断する</button>' +
       "</div>";
