@@ -88,9 +88,9 @@
         }
       });
     }
-    function update(carrier) {
+    function update(carrier, skipMatrix) {
       var r = sd.results[carrier];
-      highlightMatrix(carrier);
+      if (!skipMatrix) highlightMatrix(carrier);
       if (!r) { out.innerHTML = ""; return; }
       var amount = (r.amount || "").replace("{hl}", r.highlight ? '<span class="hl">' + esc(r.highlight) + "</span>" : "");
       var pills = (r.eligible || []).map(function (n) { return '<span class="sd-pill">' + esc(n) + "</span>"; }).join("");
@@ -109,7 +109,7 @@
       });
     });
     var on = wrap.querySelector(".sd-toggle button.on") || btns[0];
-    if (on) update(on.getAttribute("data-carrier"));
+    if (on) update(on.getAttribute("data-carrier"), true); // init: panel only; don't pre-highlight the now-visible matrix
   })();
 
   /* ---------- collapse (さらに見る) ---------- */

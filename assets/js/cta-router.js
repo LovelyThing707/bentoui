@@ -6,12 +6,15 @@
    The 5 "指定なし" products have the same URL in all 4 variants, so the routing
    logic is uniform for every product.
 
-   NOTE (client decision 2026-07-11 — supersedes §8's click-id passthrough):
-   we do NOT write the gclid/yclid/msclkid VALUE into the outbound URL; those
-   params stay empty as provided. The click-id reaches the ASP via the Referer
-   header instead (meta referrer = no-referrer-when-downgrade), so also passing
-   it in the URL would risk double-counting. Source detection is kept only to
-   choose the correct per-source variant (each magic-ad variant has its own bId). */
+   NOTE (click-id handling — client decisions):
+   - gclid / yclid: Referer-only (2026-07-11). Their VALUE is NOT written into the
+     URL; meta referrer (no-referrer-when-downgrade) carries them and GTM's
+     Conversion Linker handles gclid — passing them in the URL too would risk
+     double-counting.
+   - msclkid: WRITTEN into the URL (2026-07-13, client req ①). Microsoft Ads is not
+     covered by GTM's Google linker, so Bing needs the explicit param. Only
+     ac.magic-ad.jp links get the msclkid= slot filled from ?msclkid.
+   Source detection still selects the per-source variant (each has its own bId). */
 (function () {
   var CTA = window.__CTA__ || {};
   var utmMap = (window.__CTA_CONFIG__ && window.__CTA_CONFIG__.utmSourceMap) || {
@@ -20,6 +23,7 @@
   var DEFAULT = (window.__CTA_CONFIG__ && window.__CTA_CONFIG__.default) || "その他";
 
   var qp = new URLSearchParams(location.search);
+  var msclkid = qp.get("msclkid");
 
   function detectSource() {
     if (qp.has("gclid")) return "google";
@@ -32,11 +36,17 @@
 
   var src = detectSource();
 
-  // Referer-only: return the source-matched variant as-is (empty gclid/yclid/msclkid slots kept)
+  // gclid/yclid: Referer-only (empty slots kept). msclkid: filled into ac.magic-ad.jp links.
+  function withMsclkid(rawUrl) {
+    if (!msclkid || !rawUrl || rawUrl.indexOf("ac.magic-ad.jp") < 0) return rawUrl;
+    try { var u = new URL(rawUrl, location.href); u.searchParams.set("msclkid", msclkid); return u.toString(); }
+    catch (e) { return rawUrl; }
+  }
   function urlFor(key) {
     var v = CTA[key];
     if (!v) return null;
-    return v[src] || v[DEFAULT] || v["その他"] || v.google || null;
+    var raw = v[src] || v[DEFAULT] || v["その他"] || v.google || null;
+    return raw ? withMsclkid(raw) : null;
   }
 
   // expose for diagnosis.js

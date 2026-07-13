@@ -421,7 +421,7 @@ function tplTop(page) {
   // simulator: horizontal 3 cards, prices rendered/updated by main.js from __SIM__
   const simKeys = Object.keys(site.simulator.products);
   const simSub = (m) => (T.simulator.sublabel || "実質月額 / {m}ヶ月").replace("{m}", m);
-  const simCards = simKeys.map((k) => `<div class="sim-card" data-sim-product="${k}"><div class="nm">${esc(p[k].name)}<span class="cheapest" style="display:none">最安</span></div><div class="price num">¥-</div><div class="sub" data-sim-sub>${esc(simSub("12"))}</div></div>`).join("");
+  const simCards = simKeys.map((k) => `<div class="sim-card" data-sim-product="${k}"><div class="nm">${brandMark(k)}<span class="cheapest" style="display:none">最安</span></div><div class="price num">¥-</div><div class="sub" data-sim-sub>${esc(simSub("12"))}</div></div>`).join("");
 
   // TOP5 matrix: 実質月額 from Excel (products.jisshitsu); 通信速度/開通/工事/種別 from Figma (T.topMatrix.matrix)
   const mx = (T.topMatrix && T.topMatrix.matrix) || {};
@@ -504,23 +504,23 @@ function tplTop(page) {
       </div>
     </div></section>
 
+    <section class="section" id="comparison-matrix"><div class="wrap">
+      ${secHead("RANKING", T.topMatrix.title, T.topMatrix.sub)}
+      <div class="matrix-wrap"><table class="matrix top5"><thead><tr><th></th><th>回線・種別</th><th>実質月額(12ヶ月)</th><th>通信速度</th><th>開通</th><th>工事</th><th>お申込み</th></tr></thead><tbody>${matrixRows}</tbody></table></div>
+      <div class="top5-cards">${matrixCards}</div>
+      <p class="rank-disclaimer">${esc(T.topMatrix.disclaimer)}</p>
+    </div></section>
+
     <section class="section" id="ranking"><div class="wrap">
       ${secHead("USE CASE", T.sceneNav.title, T.sceneNav.sub)}
       <div class="nav-grid scene">${scenes}</div>
-      <button class="collapse-toggle" data-target="more-top" data-more="回線タイプ・料金比較・スマホ割をもっと見る ▼" data-less="閉じる ▲" aria-controls="more-top">回線タイプ・料金比較・スマホ割をもっと見る ▼</button>
+      <button class="collapse-toggle" data-target="more-top" data-more="回線タイプ別比較・スマホ割・その他をもっと見る ▼" data-less="閉じる ▲" aria-controls="more-top">回線タイプ別比較・スマホ割・その他をもっと見る ▼</button>
     </div></section>
 
     <div class="collapsible collapsed" id="more-top"><div class="collapse-body">
     <section class="section"><div class="wrap">
       ${secHead("LINE TYPE", T.lineType.title, T.lineType.sub, "blue")}
       <div class="nav-grid type">${types}</div>
-    </div></section>
-
-    <section class="section" id="comparison-matrix"><div class="wrap">
-      ${secHead("RANKING", T.topMatrix.title, T.topMatrix.sub)}
-      <div class="matrix-wrap"><table class="matrix top5"><thead><tr><th></th><th>回線・種別</th><th>実質月額(12ヶ月)</th><th>通信速度</th><th>開通</th><th>工事</th><th>お申込み</th></tr></thead><tbody>${matrixRows}</tbody></table></div>
-      <div class="top5-cards">${matrixCards}</div>
-      <p class="rank-disclaimer">${esc(T.topMatrix.disclaimer)}</p>
     </div></section>
 
     <section class="section" id="sumaho-wari"><div class="wrap">

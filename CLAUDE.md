@@ -76,7 +76,7 @@ let src = p.has('gclid')?'google':p.has('yclid')?'yahoo':p.has('msclkid')?'bing'
 document.querySelectorAll('[data-cta]').forEach(a=>{ a.href = product.cta[src]; });
 ```
 **⚠ BLOCKER (RESOLVED):** the actual affiliate URLs are in the Excel リンク先一覧 sheet (11 products; 6 magic-ad source-routed w/ empty `gclid=&yclid=&msclkid=` slots, 5 単一URL a8/rentracks/etc.).
-**Click-id passthrough — REMOVED (client decision 2026-07-11):** do NOT write the gclid/yclid/msclkid VALUE into the outbound URL. The client goes **Referer-only** (meta referrer `no-referrer-when-downgrade` carries the landing URL, incl. click-id, to the ASP) to avoid double-counting; the URL param slots stay empty. `cta-router.js` keeps only source→variant selection (each magic-ad variant has its own `bId`).
+**Click-id handling (client decisions):** **gclid/yclid = Referer-only** (2026-07-11): do NOT write their VALUE into the URL — meta referrer `no-referrer-when-downgrade` carries them and GTM's Conversion Linker handles gclid; passing them in the URL too would double-count. **msclkid = WRITTEN into the URL** (2026-07-13, req ①): Microsoft Ads isn't covered by GTM's Google linker, so Bing needs the explicit param — `cta-router.js` fills the `msclkid=` slot on `ac.magic-ad.jp` links from `?msclkid` (`withMsclkid`). Source→variant selection kept (each magic-ad variant has its own `bId`).
 
 ## 9. Diagnosis (セルフ診断) → diagnosis.js
 Quiz; only **Q1 (利用場所)** branches the result:
