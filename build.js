@@ -575,9 +575,9 @@ function main() {
   fs.writeFileSync(path.join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, "utf8");
   fs.writeFileSync(path.join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${BASE}/sitemap.xml\n`, "utf8");
 
-  // assets + data
+  // assets only — data/ is inlined at build time (dataBlobs), never fetched at
+  // runtime, so it is NOT copied to dist (keeps internal _note/buildNotes private).
   copyDir(path.join(ROOT, "assets"), path.join(DIST, "assets"));
-  copyDir(path.join(ROOT, "data"), path.join(DIST, "data"));
 
   // prune the original Japanese-named eyecatch duplicates from dist (only slug names are referenced)
   const ecDir = path.join(DIST, "assets", "img", "eyecatch");

@@ -21,8 +21,8 @@
     "brand": "ネット回線比較.com",
     "contactEmail": "contact@ad-kikoushi.jp",
     "gtmId": "GTM-59Z4BH",
-    "baseUrl": "https://bentoui.vercel.app",
-    "_baseUrl_note": "Used for canonical/OG/sitemap absolute URLs. CHANGE to the client's real domain (e.g. https://ネット回線比較.com → punycode https://xn--...) once live.",
+    "baseUrl": "https://internet-hikaku.com/lp/ranking/bui",
+    "_baseUrl_note": "Production = Xserver subdirectory https://internet-hikaku.com/lp/ranking/bui/ (2026-07-11). Feeds canonical/OG/JSON-LD/sitemap absolute URLs. Site uses relative internal paths so it runs in this subdir as-is. bentoui.vercel.app remains a preview only.",
     "copyright": "© 2026 ネット回線比較.com",
     "promoLine": "本ページはプロモーションが含まれます",
     "eyecatchBadge": {
