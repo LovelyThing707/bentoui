@@ -60,7 +60,7 @@ function head(page, title, desc, ld) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer-when-downgrade">
-<script>document.documentElement.classList.add('anim')</script>
+${site.site.noindex ? `<meta name="robots" content="noindex,follow">\n` : ""}<script>document.documentElement.classList.add('anim')</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${esc(url)}">

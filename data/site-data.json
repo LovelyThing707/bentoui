@@ -23,6 +23,8 @@
     "gtmId": "GTM-59Z4BH",
     "baseUrl": "https://internet-hikaku.com/lp/ranking/bui",
     "_baseUrl_note": "Production = Xserver subdirectory https://internet-hikaku.com/lp/ranking/bui/ (2026-07-11). Feeds canonical/OG/JSON-LD/sitemap absolute URLs. Site uses relative internal paths so it runs in this subdir as-is. bentoui.vercel.app remains a preview only.",
+    "noindex": true,
+    "_noindex_note": "Paid affiliate bridge LP under the same-topic parent domain → emits <meta robots noindex,follow> to keep it out of organic search and avoid duplicate-content overlap with internet-hikaku.com's own ranking pages. robots.txt still Allows crawl so bots can READ the noindex. Set false to make it indexable.",
     "copyright": "© 2026 ネット回線比較.com",
     "promoLine": "本ページはプロモーションが含まれます",
     "eyecatchBadge": {
